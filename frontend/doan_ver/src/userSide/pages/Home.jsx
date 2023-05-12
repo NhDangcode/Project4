@@ -36,7 +36,7 @@ const Home = () => {
                 .slice(0, 8);
 
             const filterTrendingProducts = products
-                .filter((item) => item.Category.category_name === "Đèn")
+                .filter((item) => item.slug === "thuc-pham-chuc-nang")
                 .slice(0, 4);
 
             setNewProducts(filterNewProducts);
@@ -51,16 +51,6 @@ const Home = () => {
                 const responeProductRecommend = await getAllProductRecommend(
                     accessToken
                 );
-                // const responeProductRecommend = [
-                //   {
-                //     rating: 1.7802607829281465,
-                //     idProduct: 12,
-                //   },
-                //   {
-                //     rating: 1.7802607829281465,
-                //     idProduct: 11,
-                //   },
-                // ];
                 let arrayProductRecommend = [];
                 responeProductRecommend.forEach((item) => {
                     if (
@@ -75,19 +65,9 @@ const Home = () => {
                         );
                     }
                 });
-
-                console.log(arrayProductRecommend);
                 setProductRecommend(arrayProductRecommend.slice(0, 8));
             };
             fetchApiGetAllProductRecommend();
-
-            // const fectchApi = async () => {
-            //   const accessToken = JSON.parse(localStorage.getItem("token"));
-            //   const responeProductRecommend = await getAllProductRecommend(accessToken);
-            //    console.log("responeProductRecommend", responeProductRecommend);
-            // }
-
-            // fectchApi();
         }
     }, [products]);
     return (

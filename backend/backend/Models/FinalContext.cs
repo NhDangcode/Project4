@@ -37,13 +37,17 @@ public partial class FinalContext : DbContext
     {
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CATEGORY__3213E83FB9E570EF");
+            entity.HasKey(e => e.Id).HasName("PK__CATEGORY__3213E83F710609F6");
 
             entity.ToTable("CATEGORY");
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
+            entity.Property(e => e.CreateAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("createAt");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
@@ -54,13 +58,17 @@ public partial class FinalContext : DbContext
 
         modelBuilder.Entity<Detailorder>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DETAILOR__3213E83FDCA3E768");
+            entity.HasKey(e => e.Id).HasName("PK__DETAILOR__3213E83F87D0DC7B");
 
             entity.ToTable("DETAILORDERS");
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
+            entity.Property(e => e.CreateAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("createAt");
             entity.Property(e => e.IdOrder).HasColumnName("idOrder");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(38, 2)")
@@ -69,18 +77,22 @@ public partial class FinalContext : DbContext
 
             entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.Detailorders)
                 .HasForeignKey(d => d.IdOrder)
-                .HasConstraintName("FK__DETAILORD__idOrd__4D94879B");
+                .HasConstraintName("FK__DETAILORD__idOrd__5165187F");
         });
 
         modelBuilder.Entity<Imageproduct>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__IMAGEPRO__3213E83FD8B98D1A");
+            entity.HasKey(e => e.Id).HasName("PK__IMAGEPRO__3213E83FF0AAF0DF");
 
             entity.ToTable("IMAGEPRODUCT");
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
+            entity.Property(e => e.CreateAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("createAt");
             entity.Property(e => e.IdProduct).HasColumnName("idProduct");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
@@ -89,12 +101,12 @@ public partial class FinalContext : DbContext
 
             entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.Imageproducts)
                 .HasForeignKey(d => d.IdProduct)
-                .HasConstraintName("FK__IMAGEPROD__idPro__5165187F");
+                .HasConstraintName("FK__IMAGEPROD__idPro__5629CD9C");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ORDER__3213E83F52E74CC3");
+            entity.HasKey(e => e.Id).HasName("PK__ORDER__3213E83F9B4BB791");
 
             entity.ToTable("ORDER");
 
@@ -115,12 +127,12 @@ public partial class FinalContext : DbContext
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("FK__ORDER__idUser__49C3F6B7");
+                .HasConstraintName("FK__ORDER__idUser__4CA06362");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PRODUCT__3213E83F4025885A");
+            entity.HasKey(e => e.Id).HasName("PK__PRODUCT__3213E83F4B84AA0E");
 
             entity.ToTable("PRODUCT");
 
@@ -139,6 +151,7 @@ public partial class FinalContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
+            entity.Property(e => e.PathImg).HasColumnName("pathImg");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("price");
@@ -150,23 +163,27 @@ public partial class FinalContext : DbContext
             entity.HasOne(d => d.IdCategoryNavigation).WithMany(p => p.Products)
                 .HasForeignKey(d => d.IdCategory)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__PRODUCT__idCateg__440B1D61");
+                .HasConstraintName("FK__PRODUCT__idCateg__46E78A0C");
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Products)
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__PRODUCT__idUser__4316F928");
+                .HasConstraintName("FK__PRODUCT__idUser__45F365D3");
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ROLE__3213E83F2BB44D2F");
+            entity.HasKey(e => e.Id).HasName("PK__ROLE__3213E83F4C8B14CE");
 
             entity.ToTable("ROLE");
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
+            entity.Property(e => e.CreateAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("createAt");
             entity.Property(e => e.Name)
                 .HasMaxLength(20)
                 .HasColumnName("name");
@@ -174,7 +191,7 @@ public partial class FinalContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__USER__3213E83FC2248948");
+            entity.HasKey(e => e.Id).HasName("PK__USER__3213E83F23F60A4A");
 
             entity.ToTable("USER");
 
@@ -182,10 +199,17 @@ public partial class FinalContext : DbContext
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
             entity.Property(e => e.Address).HasColumnName("address");
+            entity.Property(e => e.CreateAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("createAt");
             entity.Property(e => e.Email)
                 .HasMaxLength(40)
                 .HasColumnName("email");
             entity.Property(e => e.IdRole).HasColumnName("idRole");
+            entity.Property(e => e.Name)
+                .HasMaxLength(40)
+                .HasColumnName("name");
             entity.Property(e => e.Password).HasColumnName("password");
             entity.Property(e => e.PathImg).HasColumnName("pathImg");
             entity.Property(e => e.Phone).HasColumnName("phone");
@@ -193,7 +217,7 @@ public partial class FinalContext : DbContext
             entity.HasOne(d => d.IdRoleNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdRole)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__USER__idRole__3B75D760");
+                .HasConstraintName("FK__USER__idRole__3D5E1FD2");
         });
 
         OnModelCreatingPartial(modelBuilder);

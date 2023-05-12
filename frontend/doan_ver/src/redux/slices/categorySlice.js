@@ -1,32 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import { getAllCategoryServices } from "../../services/categoryServices";
 
-const initialState = {
-  categories: [],
-};
-
-const categorySlice = createSlice({
-  name: "categorySlice",
-  initialState,
-  reducers: {
-    getAllCategoryAction: (state, action) => {
-      state.categories = action.payload;
+export const categorySlice = createSlice({
+    name: "category",
+    initialState: {
+        categories: [],
     },
-  },
+    extraReducers: (builder) => {
+        builder.addCase(getAllCategoryApi.fulfilled, (state, action) => {
+            state.categories = action.payload;
+        });
+    },
 });
 
-export const { getAllCategoryAction } = categorySlice.actions;
-
-export default categorySlice.reducer;
-
-// --action thunk-------------
-export const getAllCategoryApi = () => {
-  return async (dispatch) => {
-    try {
-      const result = await getAllCategoryServices();
-      dispatch(getAllCategoryAction(result.data));
-    } catch (error) {
-      console.log(error.message);
+export const getAllCategoryApi = createAsyncThunk(
+    "category/getAllCategory",
+    async () => {
+        const respone = await getAllCategoryServices();
+        console.log(respone.data);
+        return respone.data;
     }
-  };
-};
+);

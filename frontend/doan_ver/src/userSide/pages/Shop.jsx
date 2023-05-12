@@ -14,7 +14,7 @@ const filterProducts = (products, filterValue, sortValue, searchValue) => {
     const filterProductsSuccess =
         filterValue === "all"
             ? products
-            : products.filter((item) => item.Category.category_name === filterValue);
+            : products.filter((item) => item.slug === filterValue);
 
     const filterProductsSuccessClone = [...filterProductsSuccess]
     const sortProductSuccess =
@@ -35,9 +35,12 @@ const filterProducts = (products, filterValue, sortValue, searchValue) => {
 
 const Shop = () => {
     const products = useSelector((state) => state.product.products);
+    const categories = useSelector((state) => state.category.categories);
+    console.log(categories);
     const [productsData, setProductsData] = useState([]);
     useEffect(() => {
         setProductsData(products);
+
     }, [products]);
     const [filterValue, setFilterValue] = useState("all");
     const [sortValue, setSortValue] = useState("all");
@@ -80,28 +83,28 @@ const Shop = () => {
 
     return (
         <Helmet title="Shop">
-            <CommonSection title="Products" />
+            <CommonSection title="Sản Phẩm" />
             <section>
                 <Container>
                     <Row>
                         <Col lg="3" md="6">
                             <div className="filter__widget">
                                 <select onChange={handleFilter}>
-                                    <option value="all">Filter By Category</option>
-                                    <option value="Sofa">Sofa</option>
-                                    <option value="Bàn làm việc">Bàn làm việc</option>
-                                    <option value="Đèn">Đèn</option>
-                                    <option value="Đồng hồ">Đồng hồ</option>
-                                    <option value="Tủ âm tường">Tủ âm tường</option>
+                                    <option value="all">Lọc theo danh mục</option>
+                                    {
+                                        categories.map((item) => (
+                                            <option value={item.slug}>{item.name}</option>
+                                        ))
+                                    }
                                 </select>
                             </div>
                         </Col>
                         <Col lg="3" md="6" className="text-end">
                             <div className="filter__widget">
                                 <select onChange={handleSort}>
-                                    <option value="all">Sort By</option>
-                                    <option value="ascending">Ascending</option>
-                                    <option value="descending">Descending</option>
+                                    <option value="all">Sắp xếp theo</option>
+                                    <option value="ascending">Tăng dần</option>
+                                    <option value="descending">Giảm dần</option>
                                 </select>
                             </div>
                         </Col>

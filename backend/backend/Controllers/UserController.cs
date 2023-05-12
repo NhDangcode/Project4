@@ -1,4 +1,5 @@
-﻿using backend.Models;
+﻿using backend.Helpers;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +12,12 @@ namespace backend.Controllers
     public class UserController : ControllerBase
     {
         private readonly FinalContext db;
-        public UserController(FinalContext _db)
+        private readonly IConfiguration _config;
+
+        public UserController(FinalContext _db, IConfiguration cf)
         {
             db = _db;
+            _config = cf;
         }
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUser()
@@ -53,7 +57,7 @@ namespace backend.Controllers
                 data = _data
             }); ;
         }
-        [HttpPost("add")]
+        [HttpPost("register")]
         public async Task<ActionResult> AddUser([FromBody] User user)
         {
             var _user = await db.Users.FirstOrDefaultAsync(x => x.Email == user.Email);
@@ -65,6 +69,7 @@ namespace backend.Controllers
                     status = 400
                 });
             }
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             await db.Users.AddAsync(user);
             await db.SaveChangesAsync();
             return Ok(new
@@ -134,6 +139,65 @@ namespace backend.Controllers
                 });
             }
         }
+        [HttpPost("login")]
+        public ActionResult Login([FromBody] Login user)
+        {
+            string _token = "";
+            var _user = (from nv in db.Users
+                            where nv.Email == user.email
+                            select new
+                            {
+                                nv.Id,
+                                nv.Password,
+                                nv.Email,
+                                nv.IdRole,
+                                nv.Address,
+                                nv.Name,
+                                nv.CreateAt,
+                                nv.Phone
+                            }).ToList();
+            if (_user == null)
+            {
+                return Ok(new
+                {
+                    message = "Tài khoản không tồn tại",
+                    status = 404
+                });
+            }
+            if (!BCrypt.Net.BCrypt.Verify(user.password, _user[0].Password))
+            {
+                return Ok(new
+                {
+                    message = "Sai mật khẩu",
+                    status = 400
+                });
+            }
+            try
+            {
+                _token = TokenHelper.Instance.CreateToken(_user[0].Email, _user[0].IdRole,db, _config);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    message = "Thiếu dữ liệu",
+                    status = 404
+                });
+            }
+            return Ok(new
+            {
+                message = "Thành công",
+                status = 200,
+                data = _user,
+                token = _token
+            });
+        }
 
+
+    }
+    public class Login
+    {
+        public string email { get; set; }
+        public string password { get; set; }
     }
 }

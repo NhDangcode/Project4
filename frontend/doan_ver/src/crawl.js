@@ -1,25 +1,29 @@
 import axios from "axios";
 const slugs = ['cham-soc-suc-khoe', 'duoc-pham', 'thuc-pham-chuc-nang', 'cham-soc-sac-dep'];
 
-let config = (_url, _data) => {
-    return {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: _url,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        data: _data
+const headers = {
+        'Content-Type': 'application/json',
     }
-};
-export const AddCategory = async category => {
+export const AddCategory = async (category, products) => {
     try {
-        const response = await axios.request(config('https://localhost:7210/api/category/add', category))
+        const response = await axios.post('https://localhost:7210/api/category/add', JSON.stringify(category), {headers})
         const result = response.data;
-        console.log(result);
+        console.log(result.message);
+        if (result.status === 400) {
+            return {
+                status: result.status
+            }
+        }
+        const message = await Promise.all(
+            products.map(async product => {
+                let _product = { ...product, idCategory: result.data.id };
+                const message = await AddProduct(_product);
+                console.log(message);
+                return message;
+            })
+        )
         return {
-            id: result.data.id,
-            status: result.data.status
+            status:message
         };
     } catch (error) {
         console.error(error);
@@ -27,11 +31,10 @@ export const AddCategory = async category => {
 }
 export const AddProduct = async product => {
     try {
-        const response = await axios.post('https://localhost:7210/api/product/add', product);
+        const response = await axios.post('https://localhost:7210/api/product/add', JSON.stringify(product), {headers});
         const result = response.data;
-        console.log(result);
         return {
-            status: result.data.status
+            status: result.status
         };
     } catch (error) {
         console.error(error);
@@ -46,6 +49,7 @@ export const handlerGetCategoryAndProduct = async slug => {
             slug: result.data.category.slug
         };
         const _products = result.data.products.edges;
+        
         var products = _products.map(item => {
             const product =
             {
@@ -54,10 +58,10 @@ export const handlerGetCategoryAndProduct = async slug => {
                 quantity: item.node.variants[0].quantityAvailable,
                 price: item.node.variants[0].pricing.priceUndiscounted.gross.amount,
                 type: item.node.variants[0].name,
+                pathImg: item.node.thumbnail.url
             }
             return product;
-
-        })
+        });
         return {
             category,
             products
@@ -69,14 +73,14 @@ export const handlerGetCategoryAndProduct = async slug => {
 export const getAllData = async () => {
     try {
         const _data = await Promise.all(
-            slugs.map(async slug => {
+            slugs.map( async slug => {
                 const response = await handlerGetCategoryAndProduct(slug);
                 return {
                     category: response.category,
                     products: response.products
                 };
-            })
-        );
+            }))
+            ;
         return _data;
     } catch (error) {
         console.error(error);
@@ -88,11 +92,9 @@ export const PostAllCategory = async () => {
         try {
             const message = await Promise.all(
                 data.map(async items => {
-                    console.log(items.category);
-                    const response = await AddCategory(items.category);
+                    const response = await AddCategory(items.category, items.products);
                     return response.status
-                })
-            )
+                }));
             return message;
         } catch (error) {
             console.error(error);

@@ -21,6 +21,8 @@ public partial class Product
 
     public Guid? IdUser { get; set; }
 
+    public string? PathImg { get; set; }
+
     public Guid? IdCategory { get; set; }
 
     public virtual Category? IdCategoryNavigation { get; set; }

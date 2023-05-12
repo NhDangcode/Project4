@@ -4,29 +4,31 @@ import HomeAdmin from "./adminSide/HomeAdmin";
 import { Progress } from "reactstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { PostAllCategory } from "./crawl";
 function App() {
-  const loading = useSelector((state) => state.user.status);
-  const navigate = useNavigate();
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  return (
-    <>
-      {loading === "loading" ? (
-        <Progress animated value="100" className="progress"></Progress>
-      ) : (
-        ""
-      )}
+    const loading = useSelector((state) => state.user.status);
+    const navigate = useNavigate();
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    return (
+        <>
+            {loading === "loading" ? (
+                <Progress animated value="100" className="progress"></Progress>
+            ) : (
+                ""
+            )}
 
-      {currentUser !== null ? (
-        currentUser.type === "client" ? (
-          <LayoutUserSide />
-        ) : (
-          <HomeAdmin />
-        )
-      ) : (
-        <LayoutUserSide />
-      )}
-    </>
-  );
+            {currentUser !== null ? (
+                currentUser.type === "client" ? (
+                    <LayoutUserSide />
+                ) : (
+                    <HomeAdmin />
+                )
+            ) : (
+                <LayoutUserSide />
+            )}
+        </>
+    );
 }
 
 export default App;

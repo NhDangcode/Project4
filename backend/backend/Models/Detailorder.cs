@@ -13,5 +13,7 @@ public partial class Detailorder
 
     public Guid IdOrder { get; set; }
 
+    public DateTime? CreateAt { get; set; }
+
     public virtual Order IdOrderNavigation { get; set; } = null!;
 }

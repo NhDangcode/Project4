@@ -27,7 +27,20 @@ namespace backend.Controllers
                     status = 404
                 });
             }
-            var _data = await db.Products.ToListAsync();
+            var _data = from product in db.Products join category in db.Categories on product.IdCategory equals category.Id select new
+            {
+                product.Id,
+                product.Name,
+                product.Price,
+                product.Quantity,
+                product.CreateAt,
+                product.Detail,
+                product.IdUser,
+                product.PathImg,
+                category.Slug,
+                
+                categoryName = category.Name
+            };
             return Ok(new
             {
                 message = "Lấy dữ liệu thành công!",

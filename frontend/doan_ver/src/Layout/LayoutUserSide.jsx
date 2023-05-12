@@ -5,8 +5,7 @@ import Routers from "../routers/RoutersUserSide";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsApi } from "../redux/slices/productSlice";
 import { getAllCartItemApi } from "../redux/slices/cartSlice";
-import { PostAllCategory } from "../crawl";
-
+import { getAllCategoryApi } from "../redux/slices/categorySlice"
 const LayoutUserSide = () => {
     const dispatch = useDispatch();
     const tokenRedux = useSelector((state) => state.user.token);
@@ -14,17 +13,15 @@ const LayoutUserSide = () => {
         JSON.parse(localStorage.getItem("token")) === undefined
             ? tokenRedux
             : JSON.parse(localStorage.getItem("token"));
-    console.log(JSON.stringify("hello"));
     useEffect(() => {
         const fetchGetAllProductsApi = async () => {
             await dispatch(getAllProductsApi());
-            await dispatch(PostAllCategory());
-            await dispatch(getAllCartItemApi(accessToken));
+            await dispatch(getAllCategoryApi());
+            //await dispatch(getAllCartItemApi(accessToken));
         };
 
         fetchGetAllProductsApi();
     }, [accessToken]);
-
     return (
         <>
             <Header />

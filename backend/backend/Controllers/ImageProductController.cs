@@ -18,7 +18,7 @@ namespace backend.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Imageproduct>>> GetAllImage()
         {
-            if (db.Imageproducts == null)
+            if (db == null)
             {
                 return Ok(new
                 {

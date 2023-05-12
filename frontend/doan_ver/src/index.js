@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import "remixicon/fonts/remixicon.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -9,8 +9,9 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { PostAllCategory } from "./crawl";
 const root = ReactDOM.createRoot(document.getElementById("root"));
+//PostAllCategory();
 root.render(
     <React.StrictMode>
         <BrowserRouter>
