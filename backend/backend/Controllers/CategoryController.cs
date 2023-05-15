@@ -76,7 +76,7 @@ namespace backend.Controllers
             });
         }
         [HttpPut("edit")]
-        public async Task<ActionResult> Edit(Category category)
+        public async Task<ActionResult> Edit([FromBody]Category category)
         {
             var _category = await db.Categories.FindAsync(category.Id);
             if (_category == null)

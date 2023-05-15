@@ -22,18 +22,18 @@ export const userSlice = createSlice({
                 state.status = "loading";
             })
             .addCase(userLoginApi.fulfilled, (state, action) => {
-                state.status = "idle";
                 action.payload.accessToken === undefined
-                    ? (state.message = "LoginFail")
-                    : (state.message = "LoginSuccess");
+                    ? (state.message = "Đăng nhập thất bại!")
+                    : (state.message = "Đăng nhập thành công!");
                 state.token = action.payload.accessToken;
-                if (state.message === "LoginSuccess") {
+                if (state.message === "Đăng nhập thành công!") {
                     state.currentUser = action.payload.currentUser;
                     localStorage.setItem(
                         "currentUser",
                         JSON.stringify(action.payload.currentUser)
                     );
                     localStorage.setItem("token", JSON.stringify(state.token));
+                    state.status = 200;
                 }
             })
             .addCase(userSignupApi.pending, (state) => {
@@ -46,14 +46,12 @@ export const userLoginApi = createAsyncThunk(
     "user/userLogin",
     async (dataLogin) => {
         const responeToken = await loginServices(dataLogin);
-        const accessToken = responeToken.data.token;
-        console.log(accessToken);
+        const accessToken = responeToken.token;
         const responeCurrenUser = await getCurrentUser(accessToken);
         const respone = {
             accessToken,
             currentUser: responeCurrenUser.data,
         };
-        console.log(respone);
         return respone;
     }
 );
@@ -61,16 +59,18 @@ export const userLoginApi = createAsyncThunk(
 export const userSignupApi = createAsyncThunk(
     "user/userSignup",
     async (dataSignup) => {
-        await signupServices(dataSignup);
+        const response = await signupServices(dataSignup);
+        return response;
     }
 );
-export const editProfileApi = (userId, userEdit, token) => {
-    return async (dispatch) => {
-        const { data } = await editProfileService(userId, userEdit, token);
-
-        localStorage.setItem("currentUser", JSON.stringify(data));
-    };
-};
+export const editProfileApi = createAsyncThunk(
+    "user/userEdit",
+    async (userEdit, token) => {
+        const response = await editProfileService(userEdit, token);
+        localStorage.setItem("currentUser", JSON.stringify(response.data));
+        return response;
+    }
+);
 
 export const uploadAvatarApi = (idUser, formData) => {
     return async (dispatch) => {

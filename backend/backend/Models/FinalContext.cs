@@ -37,7 +37,7 @@ public partial class FinalContext : DbContext
     {
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CATEGORY__3213E83F710609F6");
+            entity.HasKey(e => e.Id).HasName("PK__CATEGORY__3213E83FDCB7AD69");
 
             entity.ToTable("CATEGORY");
 
@@ -58,7 +58,7 @@ public partial class FinalContext : DbContext
 
         modelBuilder.Entity<Detailorder>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DETAILOR__3213E83F87D0DC7B");
+            entity.HasKey(e => e.Id).HasName("PK__DETAILOR__3213E83F89EE28CC");
 
             entity.ToTable("DETAILORDERS");
 
@@ -70,6 +70,7 @@ public partial class FinalContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("createAt");
             entity.Property(e => e.IdOrder).HasColumnName("idOrder");
+            entity.Property(e => e.IdProduct).HasColumnName("idProduct");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(38, 2)")
                 .HasColumnName("price");
@@ -77,12 +78,16 @@ public partial class FinalContext : DbContext
 
             entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.Detailorders)
                 .HasForeignKey(d => d.IdOrder)
-                .HasConstraintName("FK__DETAILORD__idOrd__5165187F");
+                .HasConstraintName("FK__DETAILORD__idOrd__52593CB8");
+
+            entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.Detailorders)
+                .HasForeignKey(d => d.IdProduct)
+                .HasConstraintName("FK__DETAILORD__idPro__534D60F1");
         });
 
         modelBuilder.Entity<Imageproduct>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__IMAGEPRO__3213E83FF0AAF0DF");
+            entity.HasKey(e => e.Id).HasName("PK__IMAGEPRO__3213E83FD5535896");
 
             entity.ToTable("IMAGEPRODUCT");
 
@@ -101,12 +106,12 @@ public partial class FinalContext : DbContext
 
             entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.Imageproducts)
                 .HasForeignKey(d => d.IdProduct)
-                .HasConstraintName("FK__IMAGEPROD__idPro__5629CD9C");
+                .HasConstraintName("FK__IMAGEPROD__idPro__5812160E");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ORDER__3213E83F9B4BB791");
+            entity.HasKey(e => e.Id).HasName("PK__ORDER__3213E83FC4CEAEC9");
 
             entity.ToTable("ORDER");
 
@@ -122,17 +127,19 @@ public partial class FinalContext : DbContext
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("status");
             entity.Property(e => e.Total)
+                .HasDefaultValueSql("((0))")
                 .HasColumnType("decimal(38, 2)")
                 .HasColumnName("total");
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("FK__ORDER__idUser__4CA06362");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__ORDER__idUser__4D94879B");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PRODUCT__3213E83F4B84AA0E");
+            entity.HasKey(e => e.Id).HasName("PK__PRODUCT__3213E83FC3479D77");
 
             entity.ToTable("PRODUCT");
 
@@ -173,7 +180,7 @@ public partial class FinalContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ROLE__3213E83F4C8B14CE");
+            entity.HasKey(e => e.Id).HasName("PK__ROLE__3213E83FDAB71AFD");
 
             entity.ToTable("ROLE");
 
@@ -191,7 +198,7 @@ public partial class FinalContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__USER__3213E83F23F60A4A");
+            entity.HasKey(e => e.Id).HasName("PK__USER__3213E83FC03DE3D8");
 
             entity.ToTable("USER");
 

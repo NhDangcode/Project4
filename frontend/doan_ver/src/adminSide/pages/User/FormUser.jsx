@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
-export default function FormProduct(props) {
+export default function FormUser(props) {
     const { initialData, submitForm } = props;
     const navigate = useNavigate();
     const categories = useSelector((state) => state.category.categories);

@@ -11,11 +11,11 @@ public partial class Product
 
     public string? Detail { get; set; }
 
-    public int Quantity { get; set; }
+    public int? Quantity { get; set; }
 
-    public decimal Price { get; set; }
+    public decimal? Price { get; set; }
 
-    public string Type { get; set; } = null!;
+    public string? Type { get; set; }
 
     public DateTime? CreateAt { get; set; }
 
@@ -24,6 +24,8 @@ public partial class Product
     public string? PathImg { get; set; }
 
     public Guid? IdCategory { get; set; }
+
+    public virtual ICollection<Detailorder> Detailorders { get; set; } = new List<Detailorder>();
 
     public virtual Category? IdCategoryNavigation { get; set; }
 

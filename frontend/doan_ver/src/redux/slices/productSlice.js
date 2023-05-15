@@ -4,7 +4,7 @@ import {
     changeStatusProductService,
     editProductService,
     getAllProductService,
-    getDetailService,
+    deleteProduct,
 } from "../../services/productService";
 
 export const productSlice = createSlice({
@@ -18,7 +18,7 @@ export const productSlice = createSlice({
         });
     },
 });
-
+// lấy danh sách sản phẩm
 export const getAllProductsApi = createAsyncThunk(
     "product/getAllProducts",
     async () => {
@@ -26,7 +26,7 @@ export const getAllProductsApi = createAsyncThunk(
         return respone.data;
     }
 );
-
+//Thêm mới một sản phẩm
 export const addProductApi = (formData, navigate) => {
     return async (dispatch) => {
         try {
@@ -39,13 +39,11 @@ export const addProductApi = (formData, navigate) => {
         }
     };
 };
-
-export const editProductApi = (formData, navigate, id) => {
+// Chỉnh sửa sản phẩm
+export const editProductApi = (formData, navigate) => {
     return async (dispatch) => {
         try {
-            const result = await editProductService(formData, id);
-
-            console.log("data", result.data);
+            const result = await editProductService(formData);
             dispatch(getAllProductsApi());
             navigate("/admin/products");
         } catch (error) {
@@ -53,7 +51,6 @@ export const editProductApi = (formData, navigate, id) => {
         }
     };
 };
-
 export const changeStatusProductApi = (idProduct, status_number) => {
 
     return async (dispatch) => {

@@ -1,41 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { deleteCategoryServices } from "../../../services/categoryServices";
-import { getAllCategoryApi } from "../../../redux/slices/categorySlice";
-export default function Category() {
+import { deleteProduct } from "../../../services/productService";
+import { getAllProductsApi } from "../../../redux/slices/productSlice";
+import { getAllUserService } from "../../../services/userService";
+export default function User() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const listProduct = useSelector((state) => state.category.categories);
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+        const fetchUser = async () => {
+            const result = await getAllUserService();
+            if (result.data.status === 200) {
+                setUsers(result.data.data);
+            }
+        };
+        fetchUser();
+    }, []);
     const onDelete = async (id) => {
-        const result = await deleteCategoryServices(id);
+        const result = await deleteProduct(id);
         if (result.status === 200) {
             toast.success("Xóa thành công!");
-            await dispatch(getAllCategoryApi());
-            navigate("/admin/categories");
+            await dispatch(getAllProductsApi());
+            navigate("/admin/products");
         } else {
             toast.error("Xóa thất bại!");
         }
     };
     const columns = [
         {
-            title: "ID",
-            dataIndex: "id",
-            key: "id",
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
         },
         {
-            title: "Tên loại sản phẩm",
-            key: "name",
+            title: "Tên tài khoản",
             dataIndex: "name",
+            key: "name",
         },
         {
-            title: "Hastag",
-            dataIndex: "slug",
-            key: "slug",
+            title: "Địa chỉ",
+            key: "address",
+            dataIndex: "address",
         },
+        {
+            title: "Số điện thoại",
+            dataIndex: "phone",
+            key: "phone",
+        },
+        {
+            title: "Ngày tạo",
+            key: "createAt",
+            dataIndex: "createAt",
+            render: (value) => {
+                var date = new Date(value);
+                return <>{date.toLocaleDateString()}</>;
+            },
+        },
+
         {
             title: "Hành động",
             key: "action",
@@ -46,7 +71,7 @@ export default function Category() {
                         color="warning"
                         sx={{ marginLeft: "4px" }}
                         onClick={() => {
-                            navigate(`/admin/category/edit/${record.id}`, {
+                            navigate(`/admin/user/edit/${record.id}`, {
                                 state: record,
                             });
                         }}
@@ -65,7 +90,7 @@ export default function Category() {
             ),
         },
     ];
-    const rows = listProduct.length > 0 ? listProduct : [];
+    const rows = users.length > 0 ? users : [];
 
     return (
         <>
@@ -76,7 +101,7 @@ export default function Category() {
                     margin: "50px",
                 }}
             >
-                <h2>Danh sách loại sản phẩm</h2>
+                <h2>Danh sách tài khoản</h2>
                 <Button
                     style={{
                         marginRight: "100px",
@@ -85,10 +110,10 @@ export default function Category() {
                     color="success"
                     variant="contained"
                     onClick={() => {
-                        navigate("/admin/category/add");
+                        navigate("/admin/product/add");
                     }}
                 >
-                    Thêm loại sản phẩm
+                    Thêm tài khoản
                 </Button>
             </div>
             <div style={{ height: "78vh", width: "100%", padding: "0px 20px" }}>

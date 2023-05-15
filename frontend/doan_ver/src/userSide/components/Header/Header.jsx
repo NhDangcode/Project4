@@ -13,8 +13,7 @@ import { useSelector } from "react-redux";
 
 import "./header.css";
 import logo from "../../../assets/images/eco-logo.png";
-import user_icon from "../../../assets/images/user-icon.png";
-
+import icon from "../../../assets/images/user-icon.png";
 const nav__links = [
     {
         path: "home",
@@ -30,14 +29,16 @@ const nav__links = [
     },
     {
         path: "order",
-        display: "Đơn mua",
+        display: "Lịch sử mua hàng",
     },
 ];
 
 const Header = () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    const userAvatar = currentUser ? currentUser.avatar : user_icon;
-    const userName = currentUser ? currentUser.user_name : "";
+    const userAvatar = currentUser?.data.pathImg
+        ? currentUser.data.pathImg
+        : icon;
+    const userName = currentUser ? currentUser?.data.name : "";
     const menuRef = useRef(null);
 
     const totalQuantity = useSelector((state) => state.cart.totalQuantity);
@@ -76,7 +77,11 @@ const Header = () => {
                                 </div>
                             </div>
                         </Link>
-                        <div className="navigation" ref={menuRef} onClick={menuToggle}>
+                        <div
+                            className="navigation"
+                            ref={menuRef}
+                            onClick={menuToggle}
+                        >
                             <ul className="menu">
                                 {nav__links.map((item, index) => {
                                     return (
@@ -84,7 +89,9 @@ const Header = () => {
                                             <NavLink
                                                 to={item.path}
                                                 className={(navClass) =>
-                                                    navClass.isActive ? "nav__active" : ""
+                                                    navClass.isActive
+                                                        ? "nav__active"
+                                                        : ""
                                                 }
                                             >
                                                 {item.display}
@@ -100,13 +107,19 @@ const Header = () => {
                 <i className="ri-heart-line"></i>
                 <span className="badge">1</span>
               </span> */}
-                            <span className="cart__icon" onClick={navigateToCart}>
+                            <span
+                                className="cart__icon"
+                                onClick={navigateToCart}
+                            >
                                 <i className="ri-shopping-bag-line"></i>
                                 <span className="badge">{totalQuantity}</span>
                             </span>
                             <div className="user__group">
                                 <div>
-                                    <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+                                    <Dropdown
+                                        isOpen={dropdownOpen}
+                                        toggle={toggle}
+                                    >
                                         <DropdownToggle className="bg-white border-0">
                                             <span>
                                                 <motion.img
@@ -116,25 +129,31 @@ const Header = () => {
                                                 />
                                             </span>
                                         </DropdownToggle>
-                                        <DropdownMenu className="drop__menu">
+                                        <DropdownMenu
+                                            style={{ marginTop: "20px" }}
+                                            className="drop__menu"
+                                        >
                                             {currentUser ? (
                                                 <>
                                                     {" "}
                                                     <NavLink
                                                         to="/profile"
                                                         className="text-dark"
-                                                        style={{ textDecoration: "none" }}
+                                                        style={{
+                                                            textDecoration:
+                                                                "none",
+                                                        }}
                                                     >
                                                         <DropdownItem className="drop__menu--item">
                                                             {" "}
-                                                            Settings
+                                                            Tài khoản
                                                         </DropdownItem>
                                                     </NavLink>
                                                     <DropdownItem
                                                         className="drop__menu--item"
                                                         onClick={handleLogout}
                                                     >
-                                                        Log out
+                                                        Đăng xuất
                                                     </DropdownItem>
                                                 </>
                                             ) : (
@@ -142,7 +161,7 @@ const Header = () => {
                                                     className="drop__menu--item"
                                                     onClick={handleClickLogin}
                                                 >
-                                                    Login
+                                                    Đăng nhập
                                                 </DropdownItem>
                                             )}
                                         </DropdownMenu>

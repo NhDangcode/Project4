@@ -5,6 +5,7 @@ import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import ProductsList from "../components/UI/ProductsList";
 import "../styles/shop.css";
+import { useNavigate } from "react-router-dom";
 
 // import products from "../../assets/data/products";
 import { useSelector } from "react-redux";
@@ -16,31 +17,34 @@ const filterProducts = (products, filterValue, sortValue, searchValue) => {
             ? products
             : products.filter((item) => item.slug === filterValue);
 
-    const filterProductsSuccessClone = [...filterProductsSuccess]
+    const filterProductsSuccessClone = [...filterProductsSuccess];
     const sortProductSuccess =
         sortValue === "all"
             ? filterProductsSuccessClone
             : sortValue === "ascending"
-                ? filterProductsSuccessClone.sort((a, b) => a.price - b.price)
-                : filterProductsSuccessClone.sort((a, b) => b.price - a.price);
+            ? filterProductsSuccessClone.sort((a, b) => a.price - b.price)
+            : filterProductsSuccessClone.sort((a, b) => b.price - a.price);
 
     const searchProducts =
         searchValue === ""
             ? sortProductSuccess
             : sortProductSuccess.filter((item) =>
-                item.name.toLowerCase().includes(searchValue.toLowerCase())
-            );
+                  item.name.toLowerCase().includes(searchValue.toLowerCase())
+              );
     return searchProducts;
 };
 
 const Shop = () => {
+    const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("currentUser"))?.data;
+    if(user === undefined){
+        navigate("/login");
+    }
     const products = useSelector((state) => state.product.products);
     const categories = useSelector((state) => state.category.categories);
-    console.log(categories);
     const [productsData, setProductsData] = useState([]);
     useEffect(() => {
         setProductsData(products);
-
     }, [products]);
     const [filterValue, setFilterValue] = useState("all");
     const [sortValue, setSortValue] = useState("all");
@@ -61,7 +65,6 @@ const Shop = () => {
 
     const handleSearch = (e) => {
         const currentSearchValue = e.target.value;
-        console.log("currentSearchValue", currentSearchValue);
         const searchedProducts = filterProducts(
             products,
             filterValue,
@@ -75,7 +78,12 @@ const Shop = () => {
 
     const handleSort = (e) => {
         const sortValue = e.target.value;
-        const sortProducts = filterProducts(products, filterValue, sortValue, searchValue);
+        const sortProducts = filterProducts(
+            products,
+            filterValue,
+            sortValue,
+            searchValue
+        );
 
         setSortValue(sortValue);
         setProductsData(sortProducts);
@@ -90,12 +98,14 @@ const Shop = () => {
                         <Col lg="3" md="6">
                             <div className="filter__widget">
                                 <select onChange={handleFilter}>
-                                    <option value="all">Lọc theo danh mục</option>
-                                    {
-                                        categories.map((item) => (
-                                            <option value={item.slug}>{item.name}</option>
-                                        ))
-                                    }
+                                    <option value="all">
+                                        Lọc theo danh mục
+                                    </option>
+                                    {categories.map((item, index) => (
+                                        <option key={index} value={item.slug}>
+                                            {item.name}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         </Col>
@@ -109,7 +119,10 @@ const Shop = () => {
                             </div>
                         </Col>
                         <Col lg="6" md="12">
-                            <div className="search__box" onChange={handleSearch}>
+                            <div
+                                className="search__box"
+                                onChange={handleSearch}
+                            >
                                 <input type="text" placeholder="Search ...." />
                                 <span>
                                     <i className="ri-search-line"></i>
@@ -123,7 +136,9 @@ const Shop = () => {
                 <Container>
                     <Row>
                         {productsData.length === 0 ? (
-                            <h1 className="text-center fs-4">No products are found !</h1>
+                            <h1 className="text-center fs-4">
+                                Hiện tại không có sản phẩm nào!
+                            </h1>
                         ) : (
                             <ProductsList data={productsData} />
                         )}

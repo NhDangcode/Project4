@@ -27,7 +27,7 @@ namespace backend.Controllers
                     status = 404
                 });
             }
-            var _data = from product in db.Products join category in db.Categories on product.IdCategory equals category.Id select new
+            var _data = from product in db.Products join category in db.Categories on product.IdCategory equals category.Id orderby product.CreateAt descending select new
             {
                 product.Id,
                 product.Name,
@@ -38,7 +38,7 @@ namespace backend.Controllers
                 product.IdUser,
                 product.PathImg,
                 category.Slug,
-                
+                product.IdCategory,
                 categoryName = category.Name
             };
             return Ok(new
@@ -49,7 +49,7 @@ namespace backend.Controllers
             }); ;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetUser(Guid id)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProduct(Guid id)
         {
             if (db.Products == null)
             {
@@ -59,13 +59,23 @@ namespace backend.Controllers
                     status = 404
                 });
             }
-            var _data = await db.Products.Where(x => x.Id == id).ToListAsync();
+            var _data = await db.Products.Where(x => x.Id == id).FirstOrDefaultAsync();
+            if(_data == null)
+            {
+                return Ok(new
+                {
+                    message = "Lấy dữ liệu thất bại!",
+                    status = 400
+                });
+            }
+            var category = db.Categories.Find(_data.IdCategory);
             return Ok(new
             {
                 message = "Lấy dữ liệu thành công!",
                 status = 200,
-                data = _data
-            }); ;
+                data = _data,
+                category
+            });
         }
         [HttpPost("add")]
         public async Task<ActionResult> AddProduct([FromBody] Product product)
@@ -80,7 +90,7 @@ namespace backend.Controllers
             });
         }
         [HttpPut("edit")]
-        public async Task<ActionResult> Edit(Product product)
+        public async Task<ActionResult> Edit([FromBody] Product product)
         {
             var _product = await db.Products.FindAsync(product.Id);
             if (_product == null)

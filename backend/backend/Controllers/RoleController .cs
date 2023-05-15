@@ -76,7 +76,7 @@ namespace backend.Controllers
             });
         }
         [HttpPut("edit")]
-        public async Task<ActionResult> Edit(Role role)
+        public async Task<ActionResult> Edit([FromBody] Role role)
         {
             var _role = await db.Roles.FindAsync(role.Id);
             if (_role == null)

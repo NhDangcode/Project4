@@ -4,11 +4,19 @@ import {
     deleteCartItemService,
     getAllCartItemService,
 } from "../../services/cartServices";
-
+const sumArray = (mang) => {
+    if (mang === undefined) {
+        return 0;
+    }
+    let sum = 0;
+    mang.map(function (value) {
+        sum += value.quantity * value.price;
+    });
+    return sum;
+};
 const initialState = {
     cartItems: [],
-    totalAmount: 0,
-    totalQuantity: 0,
+    total: 0
 };
 
 const cartSlice = createSlice({
@@ -23,37 +31,24 @@ const cartSlice = createSlice({
         builder
             .addCase(getAllCartItemApi.fulfilled, (state, action) => {
                 state.cartItems = action.payload;
-                state.totalAmount = action.payload[0].Cart.total_cart;
-                state.totalQuantity = action.payload.reduce(
-                    (total, item) => total + Number(item.quantity),
-                    0
-                );
+                state.total = sumArray(state.cartItems);
             })
             .addCase(getAllCartItemApi.rejected, (state, action) => {
                 state.cartItems = [];
-                state.totalAmount = 0;
-                state.totalQuantity = 0;
+                state.total = 0;
             })
             .addCase(addProductToCartApi.fulfilled, (state, action) => {
                 state.cartItems = action.payload;
-                state.totalAmount = action.payload[0].Cart.total_cart;
-                state.totalQuantity = action.payload.reduce(
-                    (total, item) => total + Number(item.quantity),
-                    0
-                );
+                state.total = sumArray(state.cartItems);
             })
             .addCase(deleteCartItemApi.fulfilled, (state, action) => {
                 state.cartItems = action.payload;
-                state.totalAmount = action.payload[0].Cart.total_cart;
-                state.totalQuantity = action.payload.reduce(
-                    (total, item) => total + Number(item.quantity),
-                    0
-                );
+                state.total = sumArray(state.cartItems);
+
             })
             .addCase(deleteCartItemApi.rejected, (state, action) => {
                 state.cartItems = [];
-                state.totalAmount = 0;
-                state.totalQuantity = 0;
+                state.total = 0;
             });
     },
 });
@@ -66,11 +61,7 @@ export const getAllCartItemApi = createAsyncThunk(
     "cart/getAllCart",
     async (accessToken) => {
         const respone = await getAllCartItemService(accessToken);
-        console.log(respone);
-        if (
-            respone === "There are no products in the cart" ||
-            respone === "You don't login"
-        ) {
+        if (respone.data === undefined) {
             return Promise.reject();
         }
         return respone.data;
@@ -80,7 +71,7 @@ export const getAllCartItemApi = createAsyncThunk(
 export const addProductToCartApi = createAsyncThunk(
     "cart/addProduct",
     async (dataCart) => {
-        const responeAddProductToCart = await addProductToCartService(dataCart);
+        await addProductToCartService(dataCart);
         const respone = await getAllCartItemService(dataCart.accessToken);
         return respone.data;
     }
@@ -89,7 +80,6 @@ export const addProductToCartApi = createAsyncThunk(
 export const deleteCartItemApi = createAsyncThunk(
     "cart/deleteProduct",
     async (dataCartDelete) => {
-        console.log(dataCartDelete.accessToken);
         const responeDeleteProductToCart = await deleteCartItemService(
             dataCartDelete
         );

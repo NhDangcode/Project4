@@ -17,7 +17,7 @@ const LayoutUserSide = () => {
         const fetchGetAllProductsApi = async () => {
             await dispatch(getAllProductsApi());
             await dispatch(getAllCategoryApi());
-            //await dispatch(getAllCartItemApi(accessToken));
+            await dispatch(getAllCartItemApi(accessToken));
         };
 
         fetchGetAllProductsApi();

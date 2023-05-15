@@ -16,32 +16,49 @@ export const getDetailService = async (id) => {
     try {
         const respone = await requestApi({
             method: "get",
-            url: `product/${id}`,
+            url: `product?id=${id}`,
         });
-        return respone;
+        return respone.data;
     } catch (error) {
         return error;
     }
 };
-
+export const deleteProduct = async (id) => {
+    try {
+        const respone = await requestApi({
+            method: "delete",
+            url: `product/delete`,
+            data: JSON.stringify(id),
+            headers: {
+                "Content-Type": "application/json",
+                //Authorization: JSON.parse(localStorage.getItem("token")),
+            },
+        });
+        return respone.data;
+    } catch (error) {
+        return error;
+    }
+};
 export const addProductService = (formData) => {
     return requestApi({
-        url: "product",
+        url: "product/add",
         method: "post",
-        data: formData,
+        data: JSON.stringify(formData),
         headers: {
-            Authorization: JSON.parse(localStorage.getItem("token")),
+            "Content-Type": "application/json",
+            //Authorization: JSON.parse(localStorage.getItem("token")),
         },
     });
 };
 
-export const editProductService = (formData, id) => {
+export const editProductService = (formData) => {
     return requestApi({
-        url: `product/${id}`,
+        url: `product/edit`,
         method: "put",
-        data: formData,
+        data: JSON.stringify(formData),
         headers: {
-            Authorization: JSON.parse(localStorage.getItem("token")),
+            "Content-Type": "application/json",
+            //Authorization: JSON.parse(localStorage.getItem("token")),
         },
     });
 };

@@ -22,7 +22,7 @@ const Signup = () => {
             phone: "",
             password: "",
             confirmedPassword: "",
-            address:""
+            address: "",
         },
         validationSchema: Yup.object({
             name: Yup.string()
@@ -58,15 +58,18 @@ const Signup = () => {
             delete dataSignup.confirmedPassword;
 
             const fectApiSignup = async () => {
-                await dispatch(userSignupApi(dataSignup));
-                const dataLogin = {
-                    name: formik.values.name,
-                    password: formik.values.password,
-                };
-                console.log(dataLogin);
-                await dispatch(userLoginApi(dataLogin));
-                toast.success("Đăng ký thành công!");
-                navigate("/home");
+                const response = await dispatch(userSignupApi(dataSignup));
+                if (response.payload.status == 200) {
+                    const dataLogin = {
+                        email: formik.values.email,
+                        password: formik.values.password,
+                    };
+                    await dispatch(userLoginApi(dataLogin));
+                    toast.success("Đăng ký thành công!");
+                    navigate("/home");
+                } else {
+                    toast.error("Đăng ký thất bại!");
+                }
             };
 
             fectApiSignup();
@@ -80,7 +83,11 @@ const Signup = () => {
                     <Row>
                         <Col lg="6" className="m-auto text-center">
                             <h3 className="fw-food fs-4">Đăng Ký</h3>
-                            <Form style={{ marginTop: "20px" }} className="auth__form" onSubmit={formik.handleSubmit}>
+                            <Form
+                                style={{ marginTop: "20px" }}
+                                className="auth__form"
+                                onSubmit={formik.handleSubmit}
+                            >
                                 <FormGroup className="form__group">
                                     <input
                                         type="text"
@@ -90,7 +97,10 @@ const Signup = () => {
                                         onChange={formik.handleChange}
                                     />
                                     {formik.errors.name && (
-                                        <p className="errorMsg"> {formik.errors.name} </p>
+                                        <p className="errorMsg">
+                                            {" "}
+                                            {formik.errors.name}{" "}
+                                        </p>
                                     )}
                                 </FormGroup>
                                 <FormGroup className="form__group">
@@ -102,7 +112,10 @@ const Signup = () => {
                                         onChange={formik.handleChange}
                                     />
                                     {formik.errors.email && (
-                                        <p className="errorMsg"> {formik.errors.email} </p>
+                                        <p className="errorMsg">
+                                            {" "}
+                                            {formik.errors.email}{" "}
+                                        </p>
                                     )}
                                 </FormGroup>
                                 <FormGroup className="form__group">
@@ -114,7 +127,10 @@ const Signup = () => {
                                         onChange={formik.handleChange}
                                     />
                                     {formik.errors.password && (
-                                        <p className="errorMsg"> {formik.errors.password} </p>
+                                        <p className="errorMsg">
+                                            {" "}
+                                            {formik.errors.password}{" "}
+                                        </p>
                                     )}
                                 </FormGroup>
                                 <FormGroup className="form__group">
@@ -128,7 +144,9 @@ const Signup = () => {
                                     {formik.errors.confirmedPassword && (
                                         <p className="errorMsg">
                                             {" "}
-                                            {formik.errors.confirmedPassword}{" "}
+                                            {
+                                                formik.errors.confirmedPassword
+                                            }{" "}
                                         </p>
                                     )}
                                 </FormGroup>
@@ -141,7 +159,10 @@ const Signup = () => {
                                         onChange={formik.handleChange}
                                     />
                                     {formik.errors.phone && (
-                                        <p className="errorMsg"> {formik.errors.phone} </p>
+                                        <p className="errorMsg">
+                                            {" "}
+                                            {formik.errors.phone}{" "}
+                                        </p>
                                     )}
                                 </FormGroup>
                                 <FormGroup className="form__group">
@@ -153,10 +174,16 @@ const Signup = () => {
                                         onChange={formik.handleChange}
                                     />
                                     {formik.errors.address && (
-                                        <p className="errorMsg"> {formik.errors.address} </p>
+                                        <p className="errorMsg">
+                                            {" "}
+                                            {formik.errors.address}{" "}
+                                        </p>
                                     )}
                                 </FormGroup>
-                                <button className="buy__btn auth__btn" type="submit">
+                                <button
+                                    className="buy__btn auth__btn"
+                                    type="submit"
+                                >
                                     Đăng ký
                                 </button>
                                 <p>

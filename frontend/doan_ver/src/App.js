@@ -5,7 +5,6 @@ import { Progress } from "reactstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { PostAllCategory } from "./crawl";
 function App() {
     const loading = useSelector((state) => state.user.status);
     const navigate = useNavigate();
@@ -19,7 +18,7 @@ function App() {
             )}
 
             {currentUser !== null ? (
-                currentUser.type === "client" ? (
+                currentUser.role === "Guest" ? (
                     <LayoutUserSide />
                 ) : (
                     <HomeAdmin />

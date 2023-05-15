@@ -20,7 +20,8 @@ const Login = () => {
             password: "",
         },
         validationSchema: Yup.object({
-            email: Yup.string().required()
+            email: Yup.string()
+                .required()
                 .min(4)
                 .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
             password: Yup.string().required(),
@@ -37,11 +38,16 @@ const Login = () => {
                 ? toast.error("Email hoặc passworld không hợp lệ!")
                 : (data = formik.values)
             : toast.error("Email hoặc passworld không hợp lệ!");
-        console.log(data);
         const fectLoginApi = async () => {
-            await dispatch(userLoginApi(data));
-            await navigate("/home");
-            toast.success("Đăng nhập thành công!");
+            const respon = await dispatch(userLoginApi(data));
+            if (respon.payload.accessToken === undefined) {
+                toast.error(
+                    "Đăng nhập thất bại! Vui lòng kiểm tra email hoặc mật khẩu."
+                );
+            } else {
+                await navigate("/home");
+                toast.success("Đăng nhập thành công!");
+            }
         };
 
         if (data !== undefined) fectLoginApi();
@@ -53,8 +59,16 @@ const Login = () => {
                 <Container>
                     <Row>
                         <Col lg="6" className="m-auto text-center">
-                            <h3 className="fw-food fs-4" style={{ marginBottom: "20px" }}>Đăng Nhập</h3>
-                            <Form className="auth__form" onSubmit={handleSubmit}>
+                            <h3
+                                className="fw-food fs-4"
+                                style={{ marginBottom: "20px" }}
+                            >
+                                Đăng Nhập
+                            </h3>
+                            <Form
+                                className="auth__form"
+                                onSubmit={handleSubmit}
+                            >
                                 <FormGroup className="form__group">
                                     <input
                                         type="email"
@@ -73,7 +87,9 @@ const Login = () => {
                                         placeholder="Nhập mật khẩu của bạn"
                                     />
                                 </FormGroup>
-                                <button className="buy__btn auth__btn">Đăng nhập</button>
+                                <button className="buy__btn auth__btn">
+                                    Đăng nhập
+                                </button>
                                 <p>
                                     Bạn có muốn đăng ký tài khoản mới không?
                                     <Link to="/signup"> Đăng ký</Link>

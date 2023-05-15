@@ -2,6 +2,9 @@
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -61,7 +64,7 @@ namespace backend.Controllers
         public async Task<ActionResult> AddUser([FromBody] User user)
         {
             var _user = await db.Users.FirstOrDefaultAsync(x => x.Email == user.Email);
-            if(_user != null)
+            if (_user != null)
             {
                 return Ok(new
                 {
@@ -69,7 +72,12 @@ namespace backend.Controllers
                     status = 400
                 });
             }
+            var role = await db.Roles.Where(x => x.Name.Equals("Guest")).FirstOrDefaultAsync();
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            if (user.IdRole == null)
+            {
+                user.IdRole = role.Id;
+            }
             await db.Users.AddAsync(user);
             await db.SaveChangesAsync();
             return Ok(new
@@ -80,7 +88,7 @@ namespace backend.Controllers
             });
         }
         [HttpPut("edit")]
-        public async Task<ActionResult> Edit(User user)
+        public async Task<ActionResult> Edit([FromBody] User user)
         {
             var _user = await db.Users.FindAsync(user.Id);
             if (_user == null)
@@ -92,11 +100,15 @@ namespace backend.Controllers
                 });
             }
             db.Entry(await db.Users.FirstOrDefaultAsync(x => x.Id == _user.Id)).CurrentValues.SetValues(user);
+            var _data = await db.Users.FindAsync(user.Id);
+            var role = await db.Roles.FindAsync(_data.IdRole);
             await db.SaveChangesAsync();
             return Ok(new
             {
                 message = "Sửa thành công!",
-                status = 200
+                status = 200,
+                data = _data,
+                role = role.Name
             });
         }
         [HttpDelete("delete")]
@@ -156,7 +168,7 @@ namespace backend.Controllers
                                 nv.CreateAt,
                                 nv.Phone
                             }).ToList();
-            if (_user == null)
+            if (_user.Count == 0)
             {
                 return Ok(new
                 {
@@ -192,7 +204,46 @@ namespace backend.Controllers
                 token = _token
             });
         }
-
+        [HttpGet("info")]
+        public ActionResult GetDataFromToken(string token)
+        {
+            if(token == "undefined")
+            {
+                return Ok(new
+                {
+                    message = "Dữ liệu trống!",
+                    status = 400
+                });
+            }
+            string _token = token.Split(' ')[1];
+            if (_token == null)
+            {
+                return Ok(new
+                {
+                    message = "Token không đúng!",
+                    status = 400
+                });
+            }
+            var handle = new JwtSecurityTokenHandler();
+            string email = Regex.Match(JsonSerializer.Serialize(handle.ReadJwtToken(_token)), "emailaddress\",\"Value\":\"(.*?)\",").Groups[1].Value;
+            var sinhvien = db.Users.Where(x => x.Email == email).FirstOrDefault();
+            if (sinhvien == null)
+            {
+                return Ok(new
+                {
+                    message = "Người dùng không tồn tại!",
+                    status = 404
+                });
+            }
+            var role = db.Roles.Find(sinhvien.IdRole);
+            return Ok(new
+            {
+                message = "Lấy dữ liệu thành công!",
+                status = 200,
+                data = sinhvien,
+                role = role.Name
+            });
+        }
 
     }
     public class Login

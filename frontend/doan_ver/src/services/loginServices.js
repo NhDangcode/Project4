@@ -5,10 +5,12 @@ export const loginServices = async (dataLogin) => {
         const respone = await requestApi({
             method: "post",
             url: "user/login",
+            headers: {
+                "Content-Type": "application/json",
+            },
             data: JSON.stringify(dataLogin),
         });
-        console.log(respone);
-        return respone;
+        return respone.data;
     } catch (error) {
         return error;
     }
@@ -19,10 +21,7 @@ export const getCurrentUser = async (accessToken) => {
     try {
         const respone = await requestApi({
             method: "get",
-            url: "user/get_infor",
-            headers: {
-                Authorization: "Bearer " + accessToken,
-            },
+            url: `user/info?token=${accessToken}`,
         });
         return respone
     } catch (error) {

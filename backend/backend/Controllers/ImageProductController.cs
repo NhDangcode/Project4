@@ -66,7 +66,7 @@ namespace backend.Controllers
             });
         }
         [HttpPut("edit")]
-        public async Task<ActionResult> Edit(Imageproduct image)
+        public async Task<ActionResult> Edit([FromBody] Imageproduct image)
         {
             var _image = await db.Imageproducts.FindAsync(image.Id);
             if (_image == null)

@@ -56,7 +56,17 @@ namespace backend.Controllers
         [HttpPost("add")]
         public async Task<ActionResult> AddDetail([FromBody] Detailorder detail)
         {
-            await db.Detailorders.AddAsync(detail);
+
+            var _detail = await db.Detailorders.Where(x => x.IdProduct == detail.IdProduct).Where(x=> x.IdOrder == detail.IdOrder).FirstOrDefaultAsync();
+            if(_detail == null)
+            {
+                await db.Detailorders.AddAsync(detail);
+            }
+            else
+            {
+                _detail.Quantity += detail.Quantity;
+                db.Entry(await db.Detailorders.FirstOrDefaultAsync(x => x.Id == _detail.Id)).CurrentValues.SetValues(_detail);
+            }
             await db.SaveChangesAsync();
             return Ok(new
             {
@@ -66,7 +76,7 @@ namespace backend.Controllers
             });
         }
         [HttpPut("edit")]
-        public async Task<ActionResult> Edit(Detailorder detail)
+        public async Task<ActionResult> Edit([FromBody] Detailorder detail)
         {
             var _detail = await db.Detailorders.FindAsync(detail.Id);
             if (_detail == null)
@@ -126,5 +136,30 @@ namespace backend.Controllers
             }
         }
 
+        [HttpGet("getAllByOrder")]
+        public async Task<ActionResult<IEnumerable<Detailorder>>> GetAllByOrder(Guid idOrder)
+        {
+            var _data = from dt in db.Detailorders
+                        join pr in db.Products on dt.IdProduct equals pr.Id
+                        where dt.IdOrder == idOrder
+                        select new
+                        {
+                            dt.Id,
+                            dt.Price,
+                            dt.Quantity,
+                            dt.CreateAt,
+                            pr.Detail,
+                            pr.IdUser,
+                            pr.PathImg,
+                            pr.Name,
+                        };
+            //var _data = await db.Detailorders.Where(x => x.IdOrder == idOrder).ToListAsync();
+            return Ok(new
+            {
+                message = "Lấy dữ liệu thành công!",
+                status = 200,
+                data  = _data
+            });
+        }
     }
 }
