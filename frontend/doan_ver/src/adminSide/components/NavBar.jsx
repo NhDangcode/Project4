@@ -39,7 +39,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
 
     const handleLogout = () => {
         localStorage.clear();
-        navigate("/home");
+        window.location = "http://localhost:3000/";
     };
 
     return (
@@ -115,8 +115,6 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
                                 horizontal: "center",
                             }}
                         >
-                            <MenuItem>Tài khoản</MenuItem>
-
                             <MenuItem onClick={handleLogout}>
                                 Đăng xuất
                             </MenuItem>

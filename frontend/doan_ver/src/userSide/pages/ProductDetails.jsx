@@ -11,15 +11,6 @@ import ProductsList from "../components/UI/ProductsList";
 import "../styles/product-details.css";
 import { toast } from "react-toastify";
 import { getDetailService } from "../../services/productService";
-import {
-    getProductDetailFeedBackService,
-    postFeedBackService,
-} from "../../services/feedBackServices";
-import {
-    addProductToCartService,
-    getAllCartItemService,
-} from "../../services/cartServices";
-
 const ProductDetails = () => {
     const accessToken = JSON.parse(localStorage.getItem("token"));
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));

@@ -22,9 +22,6 @@ const OrderCard = (props) => {
     return (
         <>
             <Container>
-                <h2 style={{ textAlign: "center", margin: "20px 0" }}>
-                    Danh sách lịch sử mua hàng
-                </h2>
                 <Card className="card__container">
                     <CardTitle className="card__title">
                         Đơn hàng được tạo lúc:{" "}
@@ -32,7 +29,7 @@ const OrderCard = (props) => {
                     </CardTitle>
                     <CardBody>
                         <Row>
-                            <Col md={8}>
+                            <Col md={6}>
                                 <CardText>
                                     Số điện thoại: <span>{user?.phone}</span>
                                 </CardText>
@@ -40,7 +37,17 @@ const OrderCard = (props) => {
                                     Địa chỉ: <span>{user?.address}</span>
                                 </CardText>
                             </Col>
-                            <Col md={4} className="drop__detail">
+                            <Col>
+                                <div>
+                                    Trạng thái:
+                                    {item.status === 1
+                                        ? " Đang chờ phê duyệt"
+                                        : item.status === 2
+                                        ? " Đã phê duyệt"
+                                        : " Chưa thanh toán"}
+                                </div>
+                            </Col>
+                            <Col md={3} className="drop__detail">
                                 <CardText>
                                     Tổng tiền:{" "}
                                     <span>{VND.format(item?.total)}</span>

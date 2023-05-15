@@ -1,19 +1,11 @@
 import React, { useRef, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
-import {
-    Col,
-    Row,
-    Card,
-    Form,
-    Button,
-    InputGroup,
-} from "@themesberg/react-bootstrap";
+import { Col, Row, Card, Form, Button } from "@themesberg/react-bootstrap";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { editProfileApi } from "../../../redux/slices/userSlice";
+import icon from "../../../assets/images/user-icon.png";
 
 export const GeneralInfoForm = () => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
@@ -62,7 +54,7 @@ export const GeneralInfoForm = () => {
             phone: user.data.phone,
             address: user.data.address,
             idRole: user.data.idRole,
-            pathImg: user.data.pathImg
+            pathImg: user.data.pathImg,
         },
 
         onSubmit: async (values) => {
@@ -88,99 +80,118 @@ export const GeneralInfoForm = () => {
         width: "240px",
     };
     return (
-        <Card border="light" className="bg-white shadow-sm mb-4">
-            <Card.Body>
-                <h5 className="mb-4">Thông tin cá nhân</h5>
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                    <img
-                        src={values.pathImg}
-                        alt="img_product"
-                        ref={imgReview}
-                        style={styleImgReview}
-                    />
-                </div>
-                <Form onSubmit={handleSubmit}>
-                    <Row>
-                        <Col md={6} className="mb-3">
-                            <Form.Group id="emal">
-                                <Form.Label>Hình ảnh</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="file"
-                                    name="pathImg"
-                                    accept=".jpg, .png"
-                                    onChange={(event) => handleUpImage(event)}
-                                />
-                            </Form.Group>
-                        </Col>
-                        <Col md={6} className="mb-3">
-                            <Form.Group id="emal">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="email"
-                                    placeholder="name@company.com"
-                                    value={values.email}
-                                    disabled
-                                    name="email"
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                        </Col>
-                        <Col md={6} className="mb-3">
-                            <Form.Group id="name">
-                                <Form.Label>Họ và tên</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Nhập họ và tên"
-                                    value={values.name}
-                                    name="name"
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
+        <>
+            <Col xs={12} xl={8}>
+                <Card border="light" className="bg-white shadow-sm mb-4">
+                    <Card.Body>
+                        <h5 className="mb-4">Thông tin cá nhân</h5>
+                        <Form onSubmit={handleSubmit}>
+                            <Row>
+                                <Col md={6} className="mb-3">
+                                    <Form.Group id="emal">
+                                        <Form.Label>Hình ảnh</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="file"
+                                            name="pathImg"
+                                            accept=".jpg, .png"
+                                            onChange={(event) =>
+                                                handleUpImage(event)
+                                            }
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={6} className="mb-3">
+                                    <Form.Group id="emal">
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="email"
+                                            placeholder="name@company.com"
+                                            value={values.email}
+                                            disabled
+                                            name="email"
+                                            onChange={handleChange}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={6} className="mb-3">
+                                    <Form.Group id="name">
+                                        <Form.Label>Họ và tên</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="text"
+                                            placeholder="Nhập họ và tên"
+                                            value={values.name}
+                                            name="name"
+                                            onChange={handleChange}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
 
-                    <Row>
-                        <Col md={6} className="mb-3">
-                            <Form.Group id="phone">
-                                <Form.Label>Số điện thoại</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="09684883343"
-                                    value={values.phone}
-                                    name="phone"
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                        </Col>
-                        <Col sm={6} className="mb-3">
-                            <Form.Group id="address">
-                                <Form.Label>Địa chỉ</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Nhập địa chỉ"
-                                    value={values.address}
-                                    name="address"
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <div className="mt-3">
-                        <Button
-                            variant="primary"
-                            type="submit"
-                            style={{ backgroundColor: "#0a1d37" }}
+                            <Row>
+                                <Col md={6} className="mb-3">
+                                    <Form.Group id="phone">
+                                        <Form.Label>Số điện thoại</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="text"
+                                            placeholder="09684883343"
+                                            value={values.phone}
+                                            name="phone"
+                                            onChange={handleChange}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col sm={6} className="mb-3">
+                                    <Form.Group id="address">
+                                        <Form.Label>Địa chỉ</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="text"
+                                            placeholder="Nhập địa chỉ"
+                                            value={values.address}
+                                            name="address"
+                                            onChange={handleChange}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <div className="mt-3">
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    style={{ backgroundColor: "#0a1d37" }}
+                                >
+                                    Lưu
+                                </Button>
+                            </div>
+                        </Form>
+                    </Card.Body>
+                </Card>
+            </Col>
+
+            <Col xs={12} xl={4}>
+                <Row>
+                    <Col xs={12}>
+                        <Card
+                            border="light"
+                            className="card__avatar text-center p-0 mb-4"
                         >
-                            Lưu
-                        </Button>
-                    </div>
-                </Form>
-            </Card.Body>
-        </Card>
+                            <div className="profile-cover rounded-top" />
+                            <Card.Body className="pb-5 card_profile">
+                                <Card.Img
+                                    src={image ? image : icon}
+                                    alt="Avatar"
+                                    ref={imgReview}
+                                    className="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-2"
+                                />
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Col>
+        </>
     );
 };

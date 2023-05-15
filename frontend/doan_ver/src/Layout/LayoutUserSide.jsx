@@ -5,7 +5,8 @@ import Routers from "../routers/RoutersUserSide";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsApi } from "../redux/slices/productSlice";
 import { getAllCartItemApi } from "../redux/slices/cartSlice";
-import { getAllCategoryApi } from "../redux/slices/categorySlice"
+import { getAllCategoryApi } from "../redux/slices/categorySlice";
+import { getAllOrderApi } from "../redux/slices/orderSlice.js";
 const LayoutUserSide = () => {
     const dispatch = useDispatch();
     const tokenRedux = useSelector((state) => state.user.token);
@@ -17,6 +18,7 @@ const LayoutUserSide = () => {
         const fetchGetAllProductsApi = async () => {
             await dispatch(getAllProductsApi());
             await dispatch(getAllCategoryApi());
+            await dispatch(getAllOrderApi());
             await dispatch(getAllCartItemApi(accessToken));
         };
 
