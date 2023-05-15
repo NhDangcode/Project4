@@ -18,15 +18,14 @@ import Collapse from "@mui/material/Collapse";
 import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
 import DeliveryDiningOutlinedIcon from "@mui/icons-material/DeliveryDiningOutlined";
 import {
-    SettingsOutlined,
+    CategoryOutlined,
     ChevronLeft,
-    ChevronRightOutlined,
     HomeOutlined,
     ShoppingCartOutlined,
     Groups2Outlined,
     ReceiptLongOutlined,
 } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import FlexBetween from "../FlexBetween";
 import "./Sidebar.css";
@@ -44,19 +43,14 @@ const navItems = [
     },
     {
         text: "Loại sản phẩm",
-        icon: <Groups2Outlined />,
+        icon: <CategoryOutlined />,
         url: "categories",
     },
     {
         text: "Tài khoản",
         icon: <Groups2Outlined />,
         url: "users",
-    },
-    // {
-    //   text: "Blog",
-    //   icon: <PublicOutlined />,
-    //   url: "blog",
-    // },
+    }
 ];
 
 const subNavItemOrder = [
@@ -153,22 +147,22 @@ const Sidebar = ({
                                             style={({ isActive }) =>
                                                 isActive
                                                     ? {
-                                                          color: theme.palette
-                                                              .secondary[100],
-                                                          backgroundColor:
-                                                              theme.palette
-                                                                  .secondary[300],
-                                                          textDecoration:
-                                                              "none",
-                                                      }
+                                                        color: theme.palette
+                                                            .secondary[100],
+                                                        backgroundColor:
+                                                            theme.palette
+                                                                .secondary[300],
+                                                        textDecoration:
+                                                            "none",
+                                                    }
                                                     : {
-                                                          color: theme.palette
-                                                              .secondary[100],
-                                                          backgroundColor:
-                                                              "transparent",
-                                                          textDecoration:
-                                                              "none",
-                                                      }
+                                                        color: theme.palette
+                                                            .secondary[100],
+                                                        backgroundColor:
+                                                            "transparent",
+                                                        textDecoration:
+                                                            "none",
+                                                    }
                                             }
                                         >
                                             <ListItemButton>
@@ -215,18 +209,6 @@ const Sidebar = ({
                                     disablePadding
                                     sx={{ color: theme.palette.secondary[100] }}
                                 >
-                                    {/* <ListItemButton sx={{ paddingLeft: "70px" }}>
-                    <ListItemIcon>
-                      <PendingOutlinedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Pending" />
-                  </ListItemButton>
-                  <ListItemButton sx={{ paddingLeft: "70px" }}>
-                    <ListItemIcon>
-                      <DeliveryDiningOutlinedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Deliveried" />
-                  </ListItemButton> */}
                                     {subNavItemOrder.map(
                                         ({ text, icon, url }) => {
                                             return (
@@ -241,29 +223,29 @@ const Sidebar = ({
                                                         style={({ isActive }) =>
                                                             isActive
                                                                 ? {
-                                                                      color: theme
-                                                                          .palette
-                                                                          .secondary[100],
-                                                                      backgroundColor:
-                                                                          theme
-                                                                              .palette
-                                                                              .secondary[300],
-                                                                      textDecoration:
-                                                                          "none",
-                                                                      paddingLeft:
-                                                                          "20px",
-                                                                  }
+                                                                    color: theme
+                                                                        .palette
+                                                                        .secondary[100],
+                                                                    backgroundColor:
+                                                                        theme
+                                                                            .palette
+                                                                            .secondary[300],
+                                                                    textDecoration:
+                                                                        "none",
+                                                                    paddingLeft:
+                                                                        "20px",
+                                                                }
                                                                 : {
-                                                                      color: theme
-                                                                          .palette
-                                                                          .secondary[100],
-                                                                      backgroundColor:
-                                                                          "transparent",
-                                                                      textDecoration:
-                                                                          "none",
-                                                                      paddingLeft:
-                                                                          "20px",
-                                                                  }
+                                                                    color: theme
+                                                                        .palette
+                                                                        .secondary[100],
+                                                                    backgroundColor:
+                                                                        "transparent",
+                                                                    textDecoration:
+                                                                        "none",
+                                                                    paddingLeft:
+                                                                        "20px",
+                                                                }
                                                         }
                                                     >
                                                         <ListItemButton>

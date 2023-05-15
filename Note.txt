@@ -1,0 +1,10 @@
+Add admin 
+
+{
+  "email": "vmhsky1@gmail.com",
+  "name": "Võ Minh Hiếu",
+  "password": "Hieu452001!@",
+  "address": "08 Hà Văn Tính",
+  "phone": "049599454",
+  "idRole": "091fd4a5-8e7c-4edb-8349-74cc86031108"
+}

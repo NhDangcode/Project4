@@ -33,7 +33,36 @@ namespace backend.Controllers
                     status = 404
                 });
             }
-            var _data = await db.Users.ToListAsync();
+        //    public Guid Id { get; set; }
+
+        //public string Email { get; set; } = null!;
+
+        //public string? Name { get; set; }
+
+        //public string Password { get; set; } = null!;
+
+        //public string? Address { get; set; }
+
+        //public string? Phone { get; set; }
+
+        //public string? PathImg { get; set; }
+
+        //public Guid? IdRole { get; set; }
+
+        //public DateTime? CreateAt { get; set; }
+        var _data = await db.Users.Select(x => new
+        {
+            x.Id,
+            x.Name,
+            x.Email,
+            x.Password,
+            x.Phone,
+            x.Address,
+            x.CreateAt,
+            x.IdRole,
+            x.PathImg,
+
+        }).ToListAsync();
             return Ok(new
             {
                 message = "Lấy dữ liệu thành công!",

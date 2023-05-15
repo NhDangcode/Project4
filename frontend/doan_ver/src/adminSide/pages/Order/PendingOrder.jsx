@@ -55,7 +55,10 @@ export default function PendingOrder() {
         {
             title: "Tổng tiền",
             dataIndex: "total",
-            key: "slug",
+            key: "total",
+            render: (value) => (
+                <>{VND.format(value)}</>
+            )
         },
         {
             title: "Hành động",

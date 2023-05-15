@@ -25,7 +25,7 @@ export default function Product() {
     };
     const columns = [
         {
-            title: "Hình ảnh sản phẩm",
+            title: "Hình ảnh",
             dataIndex: "pathImg",
             key: "pathImg",
             render: (text) => (
@@ -36,6 +36,7 @@ export default function Product() {
             title: "Tên sản phẩm",
             dataIndex: "name",
             key: "name",
+            width: 200
         },
         {
             title: "Giá sản phẩm",
@@ -45,7 +46,7 @@ export default function Product() {
             },
         },
         {
-            title: "Số lượng sản phẩm",
+            title: "Số lượng",
             dataIndex: "quantity",
             key: "quantity",
         },

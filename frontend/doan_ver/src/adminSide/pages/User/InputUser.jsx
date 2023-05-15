@@ -16,11 +16,13 @@ export default function InputProduct() {
         phone: "",
         idRole: "",
         pathImg: "",
+        confirmedPassword: "",
     };
 
     const addUser = async (formData) => {
         const result = await dispatch(userSignupApi(formData));
-        if (result.status === 200) {
+        console.log(result);
+        if (result.payload.status === 200) {
             toast.success("Thêm tài khoản thành công!");
             navigate("/admin/users");
         } else {

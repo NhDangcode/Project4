@@ -20,7 +20,6 @@ const Home = () => {
     const products = useSelector((state) => state.product.products);
     const [trendingProducts, setTrendingProducts] = useState([]);
     const [newProducts, setNewProducts] = useState([]);
-    const [productRecommend, setProductRecommend] = useState([]);
     useEffect(() => {
         const currentDate = new Date();
         if (products.lenght !== 0) {
@@ -42,36 +41,6 @@ const Home = () => {
 
             setNewProducts(filterNewProducts);
             setTrendingProducts(filterTrendingProducts);
-        }
-    }, [products]);
-
-    useEffect(() => {
-        if (products.lenght !== 0) {
-            const accessToken = JSON.parse(localStorage.getItem("token"));
-            const fetchApiGetAllProductRecommend = async () => {
-                const responeProductRecommend = await getAllProductRecommend(
-                    accessToken
-                );
-                let arrayProductRecommend = [];
-                responeProductRecommend.forEach((item) => {
-                    if (
-                        products.findIndex(
-                            (itemFind) => itemFind.id === item.idProduct
-                        ) !== -1 &&
-                        item.rating !== null
-                    ) {
-                        arrayProductRecommend.push(
-                            products[
-                                products.findIndex(
-                                    (itemFind) => itemFind.id === item.idProduct
-                                )
-                            ]
-                        );
-                    }
-                });
-                setProductRecommend(arrayProductRecommend.slice(0, 8));
-            };
-            fetchApiGetAllProductRecommend();
         }
     }, [products]);
     return (
@@ -101,7 +70,7 @@ const Home = () => {
                 </Container>
             </section>
             <Services />
-            {productRecommend.length !== 0 ? (
+            {/* {productRecommend.length !== 0 ? (
                 <section className="trending__products">
                     <Container>
                         <Row>
@@ -120,7 +89,7 @@ const Home = () => {
                 </section>
             ) : (
                 <></>
-            )}
+            )} */}
 
             <section className="best__sales">
                 <Container>

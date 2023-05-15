@@ -17,6 +17,7 @@ import DeliveriedOrder from "./pages/Order/DeliveriedOrder";
 import OrderDetail from "./pages/Order/OrderDetail";
 import InputCategory from "./pages/Category/InputCategory";
 import EditCategory from "./pages/Category/EditCategory";
+import InputUser from "./pages/User/InputUser";
 const HomeAdmin = () => {
     const mode = useSelector((state) => state.globalSlice.mode);
     const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -31,6 +32,7 @@ const HomeAdmin = () => {
                     />
                     <Route path="/admin/*" element={<Layout />}>
                         <Route path="users" element={<User />} />
+                        <Route path="users/add" element={<InputUser />} />
                         <Route path="products" element={<Product />} />
                         <Route path="categories" element={<Category />} />
                         <Route

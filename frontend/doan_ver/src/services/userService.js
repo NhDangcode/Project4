@@ -44,4 +44,30 @@ export const getAllUserService = () => {
 
     });
 };
+export const getAllRoleService = () => {
+    return requestApi({
+        method: "get",
+        url: `role/all`,
+        headers: {
+            //Authorization: "Bearer " + JSON.parse(localStorage.getItem("token")),
+        },
+
+    });
+};
+export const deleteUser = async (id) => {
+    try {
+        const respone = await requestApi({
+            method: "delete",
+            url: `user/delete`,
+            data: JSON.stringify(id),
+            headers: {
+                "Content-Type": "application/json",
+                //Authorization: JSON.parse(localStorage.getItem("token")),
+            },
+        });
+        return respone.data;
+    } catch (error) {
+        return error;
+    }
+};
 

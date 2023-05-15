@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "antd";
-import { useSelector, useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { deleteProduct } from "../../../services/productService";
-import { getAllProductsApi } from "../../../redux/slices/productSlice";
+import { deleteUser } from "../../../services/userService";
 import { getAllUserService } from "../../../services/userService";
 export default function User() {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"))?.data;
     const [users, setUsers] = useState([]);
     useEffect(() => {
         const fetchUser = async () => {
@@ -19,13 +17,12 @@ export default function User() {
             }
         };
         fetchUser();
-    }, []);
+    }, [users]);
     const onDelete = async (id) => {
-        const result = await deleteProduct(id);
+        const result = await deleteUser(id);
         if (result.status === 200) {
             toast.success("Xóa thành công!");
-            await dispatch(getAllProductsApi());
-            navigate("/admin/products");
+            navigate("/admin/users");
         } else {
             toast.error("Xóa thất bại!");
         }
@@ -68,19 +65,8 @@ export default function User() {
                 <>
                     <Button
                         variant="contained"
-                        color="warning"
-                        sx={{ marginLeft: "4px" }}
-                        onClick={() => {
-                            navigate(`/admin/user/edit/${record.id}`, {
-                                state: record,
-                            });
-                        }}
-                    >
-                        Chỉnh sửa
-                    </Button>
-                    <Button
-                        variant="contained"
                         color="error"
+                        disabled={record.id === currentUser.id ? true : false}
                         sx={{ marginLeft: "4px" }}
                         onClick={() => onDelete(record.id)}
                     >
@@ -110,7 +96,7 @@ export default function User() {
                     color="success"
                     variant="contained"
                     onClick={() => {
-                        navigate("/admin/product/add");
+                        navigate("/admin/users/add");
                     }}
                 >
                     Thêm tài khoản

@@ -1,15 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
+import { getAllRoleService } from "../../../services/userService"
 export default function FormUser(props) {
     const { initialData, submitForm } = props;
-    const navigate = useNavigate();
-    const categories = useSelector((state) => state.category.categories);
-    const user = JSON.parse(localStorage.getItem("currentUser"))?.data;
-
+    const [roles, setRoles] = useState([]);
     const imgReview = useRef(null);
     const [image, setImage] = useState();
     const handleUpImage = async (e) => {
@@ -34,23 +30,51 @@ export default function FormUser(props) {
         });
         setImage(imgArr[0].url);
     };
+    useEffect(() => {
+        const result = async () => {
+            const respon = await getAllRoleService();
+            if (respon.data.status === 200) {
+                setRoles(respon.data.data);
+            }
+        }
+        result();
+    })
     const formik = useFormik({
         initialValues: {
             ...initialData,
         },
 
+
         validationSchema: Yup.object().shape({
-            name: Yup.string().required("Tên sản phẩm không được để trống!"),
-            price: Yup.string().required("Giá sản phẩm không được để trống!"),
-            quantity: Yup.string().required(
-                "Giá sản phẩm không được để trống!"
-            ),
-            detail: Yup.string().required(
-                "Chi tiết sản phẩm không được để trống!"
-            ),
-            idCategory: Yup.string().required(
-                "Loại sản phẩm không được để trống!"
-            ),
+            name: Yup.string()
+                .required("Vui lòng nhập tên tài khoản")
+                .min(4, "Phải có 4 ký tự trở lên"),
+            address: Yup.string()
+                .required("Vui lòng nhập địa chỉ")
+                .min(4, "Phải có 4 ký tự trở lên"),
+            email: Yup.string()
+                .required("Vui lòng nhập email")
+                .matches(
+                    /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                    "Vui lòng nhập địa chỉ email hợp lệ"
+                ),
+            password: Yup.string()
+                .required("Vui lòng nhập mật khẩu")
+                .matches(
+                    /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/,
+                    "Mật khẩu phải có 7-19 ký tự và chứa ít nhất một chữ cái, một số và một ký tự đặc biệt"
+                ),
+            confirmedPassword: Yup.string()
+                .required("Vui lòng nhập xác nhận mật khẩu")
+                .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp"),
+            phone: Yup.string()
+                .required("Vui lòng nhập số điện thoại")
+                .matches(
+                    /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+                    "Phải là một số điện thoại hợp lệ"
+                ),
+            idRole: Yup.string()
+                .required("Vui lòng chọn role")
         }),
 
         onSubmit: async (values) => {
@@ -60,9 +84,8 @@ export default function FormUser(props) {
             } else {
                 _image = values.pathImg;
             }
-            let data = { ...values, pathImg: _image, idUser: user.id };
-            delete data.slug;
-            delete data.categoryName;
+            let data = { ...values, pathImg: _image };
+            delete data.confirmedPassword;
             submitForm(data);
         },
     });
@@ -93,9 +116,10 @@ export default function FormUser(props) {
                 />
             </div>
             <form onSubmit={handleSubmit}>
+                {/* Ảnh cá nhân */}
                 <div className="form-group">
                     <h5 htmlFor="imgProduct" className="form-label">
-                        Hình ảnh sản phẩm
+                        Hình ảnh
                     </h5>
                     <input
                         className="form-control"
@@ -107,78 +131,110 @@ export default function FormUser(props) {
                     />
                     <span className="text-danger">{errors.pathImg}</span>
                 </div>
-
+                {/* Tên  */}
                 <div className="form-group">
                     <h5 style={{ marginBottom: "10px" }} htmlFor="name_product">
-                        Tên sản phẩm
+                        Tên tài khoản
                     </h5>
                     <input
                         onChange={handleChange}
                         type="text"
                         className="form-control"
-                        id="name_product"
+                        id="name"
                         name="name"
                         aria-describedby="validationName"
                         value={values.name}
                     />
                     <span className="text-danger">{errors.name}</span>
                 </div>
-
+                {/* Email */}
                 <div className="form-group">
-                    <h5 style={{ marginBottom: "10px" }} htmlFor="price">
-                        Giá sản phẩm
+                    <h5 style={{ marginBottom: "10px" }} htmlFor="email">
+                        Email
+                    </h5>
+                    <input
+                        onChange={handleChange}
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        name="email"
+                        value={values.email}
+                    />
+                    <span className="text-danger">{errors.email}</span>
+                </div>
+                {/* Mật khẩu */}
+                <div className="form-group">
+                    <h5 style={{ marginBottom: "10px" }} htmlFor="password">
+                        Mật khẩu
+                    </h5>
+                    <input
+                        onChange={handleChange}
+                        type="password"
+                        className="form-control"
+                        id="password"
+                        name="password"
+                        value={values.password}
+                    />
+                    <span className="text-danger">{errors.password}</span>
+                </div>
+                {/* Xác nhận mật khẩu */}
+                <div className="form-group">
+                    <h5 style={{ marginBottom: "10px" }} htmlFor="confirmedPassword">
+                        Xác nhận mật khẩu
+                    </h5>
+                    <input
+                        onChange={handleChange}
+                        type="password"
+                        className="form-control"
+                        id="confirmedPassword"
+                        name="confirmedPassword"
+                        value={values.confirmedPassword}
+                    />
+                    <span className="text-danger">{errors.confirmedPassword}</span>
+                </div>
+                {/* Địa chỉ */}
+                <div className="form-group">
+                    <h5 style={{ marginBottom: "10px" }} htmlFor="address">
+                        Địa chỉ
                     </h5>
                     <input
                         onChange={handleChange}
                         type="text"
                         className="form-control"
-                        id="price"
-                        name="price"
-                        value={values.price}
+                        id="address"
+                        name="address"
+                        value={values.address}
                     />
-                    <span className="text-danger">{errors.price}</span>
+                    <span className="text-danger">{errors.address}</span>
                 </div>
+                {/* Số điện thoại */}
                 <div className="form-group">
-                    <h5 style={{ marginBottom: "10px" }} htmlFor="price">
-                        Số lượng sản phẩm
+                    <h5 style={{ marginBottom: "10px" }} htmlFor="phone">
+                        Số điện thoại
                     </h5>
                     <input
                         onChange={handleChange}
                         type="text"
                         className="form-control"
-                        id="quantity"
-                        name="quantity"
-                        value={values.quantity}
+                        id="phone"
+                        name="phone"
+                        value={values.phone}
                     />
-                    <span className="text-danger">{errors.quantity}</span>
+                    <span className="text-danger">{errors.phone}</span>
                 </div>
+                {/* Loại tài khoản */}
                 <div className="form-group">
-                    <h5 style={{ marginBottom: "10px" }} htmlFor="description">
-                        Chi tiết sản phẩm
-                    </h5>
-                    <textarea
-                        className="form-control"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                        name="detail"
-                        onChange={handleChange}
-                        value={values.detail}
-                    ></textarea>
-                    <span className="text-danger">{errors.detail}</span>
-                </div>
-
-                <div className="form-group">
-                    <h5 style={{ marginBottom: "10px" }} htmlFor="idCategory">
-                        Loại sản phẩm
+                    <h5 style={{ marginBottom: "10px" }} htmlFor="idRole">
+                        Loại tài khoản
                     </h5>
                     <select
                         className="custom-select"
-                        name="idCategory"
+                        name="idRole"
                         onChange={handleChange}
-                        value={values.idCategory}
+                        value={values.idRole}
                     >
-                        <option>Chọn loại sản phẩm</option>
-                        {categories.map((category, index) => {
+                        <option>Chọn loại tài khoản</option>
+                        {roles.map((category, index) => {
                             return (
                                 <option key={index} value={category.id}>
                                     {category.name}

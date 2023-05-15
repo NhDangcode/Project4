@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -18,9 +18,41 @@ import { editProfileApi } from "../../../redux/slices/userSlice";
 export const GeneralInfoForm = () => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
     const token = JSON.parse(localStorage.getItem("token"));
+    const imgReview = useRef(null);
+    const [image, setImage] = useState();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const showImgProduct = (fileToLoad) => {
+        let fileReader = new FileReader();
+        fileReader.onload = function (fileLoadEvent) {
+            let srcData = fileLoadEvent.target.result;
+            imgReview.current.src = srcData;
+            imgReview.current.style.display = "block";
+        };
+        fileReader.readAsDataURL(fileToLoad);
+    };
+    const handleUpImage = async (e) => {
+        showImgProduct(e.target.files[0]);
+        let imgArr = [];
+        const formData = new FormData();
+        formData.append("file", e.target.files[0]);
+        formData.append("upload_preset", "kpmcyaxr");
+        formData.append("cloud_name", "df6mryfkp");
+        const res = await fetch(
+            "https://api.cloudinary.com/v1_1/df6mryfkp/image/upload",
+            {
+                method: "POST",
+                body: formData,
+            }
+        );
 
+        const result = await res.json();
+        imgArr.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+        });
+        setImage(imgArr[0].url);
+    };
     const formik = useFormik({
         initialValues: {
             id: user.data.id,
@@ -30,10 +62,18 @@ export const GeneralInfoForm = () => {
             phone: user.data.phone,
             address: user.data.address,
             idRole: user.data.idRole,
+            pathImg: user.data.pathImg
         },
 
         onSubmit: async (values) => {
-            const respon = await dispatch(editProfileApi(values, token));
+            var _image = "";
+            if (image) {
+                _image = image;
+            } else {
+                _image = values.pathImg;
+            }
+            let data = { ...values, pathImg: _image };
+            const respon = await dispatch(editProfileApi(data, token));
             if (respon.payload.data.status == 200) {
                 toast.success("Sửa thông tin thành công!");
                 navigate("/profile");
@@ -42,15 +82,37 @@ export const GeneralInfoForm = () => {
             }
         },
     });
-
     const { values, handleChange, handleSubmit } = formik;
-
+    const styleImgReview = {
+        display: values.pathImg ? "block" : "none",
+        width: "240px",
+    };
     return (
         <Card border="light" className="bg-white shadow-sm mb-4">
             <Card.Body>
                 <h5 className="mb-4">Thông tin cá nhân</h5>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                    <img
+                        src={values.pathImg}
+                        alt="img_product"
+                        ref={imgReview}
+                        style={styleImgReview}
+                    />
+                </div>
                 <Form onSubmit={handleSubmit}>
                     <Row>
+                        <Col md={6} className="mb-3">
+                            <Form.Group id="emal">
+                                <Form.Label>Hình ảnh</Form.Label>
+                                <Form.Control
+                                    required
+                                    type="file"
+                                    name="pathImg"
+                                    accept=".jpg, .png"
+                                    onChange={(event) => handleUpImage(event)}
+                                />
+                            </Form.Group>
+                        </Col>
                         <Col md={6} className="mb-3">
                             <Form.Group id="emal">
                                 <Form.Label>Email</Form.Label>
