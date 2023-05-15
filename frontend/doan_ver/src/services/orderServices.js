@@ -9,7 +9,7 @@ export const createOrderService = async () => {
             method: "get",
             url: `order/confirm?idUser=${user.id}&status=1`,
             headers: {
-                // Authorization: token,
+                Authorization: token,
             },
         });
         return respone.data;
@@ -24,7 +24,7 @@ export const getAllOrderAnUserService = async () => {
             method: "get",
             url: `order/getAllOrder?idUser=${user.id}`,
             headers: {
-                //Authorization: "Bearer " + `${accessToken}`,
+                Authorization: token,
             },
         });
         return respone;
@@ -40,7 +40,7 @@ export const deleteOrder = async (id) => {
             data: JSON.stringify(id),
             headers: {
                 "Content-Type": "application/json",
-                //Authorization: JSON.parse(localStorage.getItem("token")),
+                Authorization: token,
             },
         });
         return respone.data;
@@ -54,7 +54,7 @@ export const getDetailsOrderService = async (dataOrderDetail) => {
             method: "get",
             url: `order/detail/getAllByOrder?idOrder=${dataOrderDetail}`,
             headers: {
-                //Authorization: "Bearer " + JSON.parse(localStorage.getItem("token")),
+                Authorization: token,
             },
         });
         return respone.data;
@@ -67,6 +67,9 @@ export const getAllOrderService = () => {
     return requestApi({
         method: "get",
         url: `order/all`,
+        headers: {
+            Authorization: token,
+        },
     });
 };
 
@@ -76,7 +79,7 @@ export const changeStatusOrderService = (idOrder) => {
         method: "get",
         url: `order/confirmOrder?idOrder=${idOrder}&status=2`,
         headers: {
-            //Authorization: "Bearer " + JSON.parse(localStorage.getItem("token")),
+            Authorization: token,
         },
     });
 }

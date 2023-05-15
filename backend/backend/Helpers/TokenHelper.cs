@@ -15,9 +15,8 @@ namespace backend.Helpers
             private set { TokenHelper.instance = value; }
         }
 
-        public string CreateToken(string email, Guid? idRole, FinalContext _db, IConfiguration _config)
+        public string CreateToken(string email, string role, IConfiguration _config)
         {
-            string role = _db.Roles.Find(idRole).Name;
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, email),

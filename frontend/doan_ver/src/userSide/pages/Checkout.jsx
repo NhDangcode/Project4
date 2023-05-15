@@ -15,6 +15,7 @@ import {} from "../../redux/slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { getAllCartItemApi } from "../../redux/slices/cartSlice";
 import { VND } from "../../utils/convertVND";
+import { getAllOrderApi } from "../../redux/slices/orderSlice";
 const Checkout = () => {
     const totalAmount = useSelector((state) => state.cart.total);
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))?.data;
@@ -42,9 +43,10 @@ const Checkout = () => {
         const fetchCreateOrderApi = async () => {
             setLoading(true);
             const responeOrder = await createOrderService();
-            await dispatch(getAllCartItemApi(accessToken));
             if (responeOrder.status == 200) {
                 toast.success("Đặt hàng thành công!");
+                await dispatch(getAllCartItemApi(accessToken));
+                await dispatch(getAllOrderApi());
                 navigate("/order");
             } else {
                 toast.error("Đặt hàng thất bại!");

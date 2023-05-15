@@ -18,7 +18,7 @@ export const addCategoryService = (formData) => {
         data: JSON.stringify(formData),
         headers: {
             "Content-Type": "application/json",
-            //Authorization: JSON.parse(localStorage.getItem("token")),
+            Authorization: JSON.parse(localStorage.getItem("token")),
         },
     });
 };
@@ -30,7 +30,7 @@ export const deleteCategoryServices = async (id) => {
             data: JSON.stringify(id),
             headers: {
                 "Content-Type": "application/json",
-                //Authorization: JSON.parse(localStorage.getItem("token")),
+                Authorization: JSON.parse(localStorage.getItem("token")),
             },
         });
         return respone.data;
@@ -45,7 +45,7 @@ export const editCategoryService = (formData) => {
         data: JSON.stringify(formData),
         headers: {
             "Content-Type": "application/json",
-            //Authorization: JSON.parse(localStorage.getItem("token")),
+            Authorization: JSON.parse(localStorage.getItem("token")),
         },
     });
 };

@@ -1,9 +1,10 @@
 import requestApi from "../utils/requestApi";
 
 const user = JSON.parse(localStorage.getItem("currentUser"))?.data;
+const token = JSON.parse(localStorage.getItem("token"));
+
 // Thêm mới 1 order detail
 export const addProductToCartService = async (dataCart) => {
-    const token = dataCart.accessToken;
     let data = dataCart.data;
     let idOrder = "";
     try {
@@ -32,7 +33,7 @@ export const createNewDetailOrrder = async (accessToken, _data) => {
             url: `order/detail/add`,
             headers: {
                 "Content-Type": "application/json",
-                //Authorization: "Bearer " + `${accessToken}`,
+                Authorization: accessToken,
             },
             data: JSON.stringify(_data),
         });
@@ -52,7 +53,7 @@ export const createNewOrrder = async (accessToken) => {
             url: `order/add`,
             headers: {
                 "Content-Type": "application/json",
-                //Authorization: "Bearer " + `${accessToken}`,
+                Authorization: accessToken,
             },
             data: JSON.stringify(_data),
         });
@@ -63,12 +64,13 @@ export const createNewOrrder = async (accessToken) => {
 }
 //lấy order chưa thanh toán
 export const getOrderNotPayment = async (accessToken) => {
+
     try {
         const respone = await requestApi({
             method: "get",
             url: `order/getOrderNotPay?idUser=${user.id}`,
             headers: {
-                //Authorization: "Bearer " + `${accessToken}`,
+                Authorization: accessToken,
             },
         });
         return respone.data;
@@ -84,7 +86,7 @@ export const getAllCartItemService = async (accessToken) => {
             method: "get",
             url: `order/detail/getAllByOrder?idOrder=${idOrder}`,
             headers: {
-                // Authorization: "Bearer " + `${accessToken}`,
+                Authorization: accessToken,
             },
         });
         return respone.data;
@@ -93,14 +95,14 @@ export const getAllCartItemService = async (accessToken) => {
     }
 };
 //Xóa 1 detail order
-export const deleteCartItemService = async (dataCartDelete) => {
+export const deleteCartItemService = async (accessToken, dataCartDelete) => {
     try {
         const respone = await requestApi({
             method: "delete",
             url: `order/detail/delete`,
             headers: {
                 "Content-Type": "application/json",
-                // Authorization: "Bearer " + `${dataCartDelete.accessToken}`,
+                Authorization: accessToken,
             },
             data: JSON.stringify(dataCartDelete.id),
         });

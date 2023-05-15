@@ -8,10 +8,11 @@ import { getAllUserService } from "../../../services/userService";
 export default function User() {
     const navigate = useNavigate();
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))?.data;
+    const token = JSON.parse(localStorage.getItem("token"));
     const [users, setUsers] = useState([]);
     useEffect(() => {
         const fetchUser = async () => {
-            const result = await getAllUserService();
+            const result = await getAllUserService(token);
             if (result.data.status === 200) {
                 setUsers(result.data.data);
             }

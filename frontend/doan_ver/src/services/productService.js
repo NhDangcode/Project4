@@ -1,4 +1,5 @@
 import requestApi from "../utils/requestApi";
+const token = JSON.parse(localStorage.getItem("token"));
 
 export const getAllProductService = async () => {
     try {
@@ -17,6 +18,9 @@ export const getDetailService = async (id) => {
         const respone = await requestApi({
             method: "get",
             url: `product?id=${id}`,
+            headers: {
+                Authorization: token,
+            },
         });
         return respone.data;
     } catch (error) {
@@ -31,8 +35,8 @@ export const deleteProduct = async (id) => {
             data: JSON.stringify(id),
             headers: {
                 "Content-Type": "application/json",
-                //Authorization: JSON.parse(localStorage.getItem("token")),
-            },
+                Authorization: token,
+            }
         });
         return respone.data;
     } catch (error) {
@@ -46,7 +50,7 @@ export const addProductService = (formData) => {
         data: JSON.stringify(formData),
         headers: {
             "Content-Type": "application/json",
-            //Authorization: JSON.parse(localStorage.getItem("token")),
+            Authorization: token,
         },
     });
 };
@@ -58,7 +62,7 @@ export const editProductService = (formData) => {
         data: JSON.stringify(formData),
         headers: {
             "Content-Type": "application/json",
-            //Authorization: JSON.parse(localStorage.getItem("token")),
+            Authorization: token,
         },
     });
 };

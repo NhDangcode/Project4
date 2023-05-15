@@ -1,5 +1,6 @@
 ﻿using backend.Helpers;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,7 +23,8 @@ namespace backend.Controllers
             db = _db;
             _config = cf;
         }
-        [HttpGet("all")]
+        [HttpGet("all"), Authorize]
+
         public async Task<ActionResult<IEnumerable<User>>> GetAllUser()
         {
             if (db.Users == null)
@@ -33,23 +35,6 @@ namespace backend.Controllers
                     status = 404
                 });
             }
-        //    public Guid Id { get; set; }
-
-        //public string Email { get; set; } = null!;
-
-        //public string? Name { get; set; }
-
-        //public string Password { get; set; } = null!;
-
-        //public string? Address { get; set; }
-
-        //public string? Phone { get; set; }
-
-        //public string? PathImg { get; set; }
-
-        //public Guid? IdRole { get; set; }
-
-        //public DateTime? CreateAt { get; set; }
         var _data = await db.Users.Select(x => new
         {
             x.Id,
@@ -70,7 +55,8 @@ namespace backend.Controllers
                 data = _data
             }); ;
         }
-        [HttpGet]
+        [HttpGet, Authorize]
+
         public async Task<ActionResult<IEnumerable<User>>> GetUser(Guid id)
         {
             if (db.Users == null)
@@ -116,7 +102,9 @@ namespace backend.Controllers
                 data = user
             });
         }
-        [HttpPut("edit")]
+        [Authorize]
+        [HttpPut("edit"), Authorize]
+
         public async Task<ActionResult> Edit([FromBody] User user)
         {
             var _user = await db.Users.FindAsync(user.Id);
@@ -140,7 +128,8 @@ namespace backend.Controllers
                 role = role.Name
             });
         }
-        [HttpDelete("delete")]
+        [HttpDelete("delete"), Authorize]
+
         public async Task<ActionResult> Delete([FromBody] Guid id)
         {
             if (db.Users == null)
@@ -181,7 +170,7 @@ namespace backend.Controllers
             }
         }
         [HttpPost("login")]
-        public ActionResult Login([FromBody] Login user)
+        public async Task<ActionResult> Login([FromBody] Login user)
         {
             string _token = "";
             var _user = (from nv in db.Users
@@ -213,9 +202,10 @@ namespace backend.Controllers
                     status = 400
                 });
             }
+            var role = await db.Roles.FindAsync(_user[0].IdRole);
             try
             {
-                _token = TokenHelper.Instance.CreateToken(_user[0].Email, _user[0].IdRole,db, _config);
+                _token = TokenHelper.Instance.CreateToken(_user[0].Email, role.Name, _config);
             }
             catch (Exception ex)
             {

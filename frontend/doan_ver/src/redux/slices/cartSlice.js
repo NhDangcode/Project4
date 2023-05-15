@@ -30,6 +30,7 @@ const cartSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAllCartItemApi.fulfilled, (state, action) => {
+                
                 state.cartItems = action.payload;
                 state.total = sumArray(state.cartItems);
             })

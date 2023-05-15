@@ -1,8 +1,7 @@
 ﻿using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace backend.Controllers
 {
@@ -34,7 +33,8 @@ namespace backend.Controllers
                 data = _data
             }); ;
         }
-        [HttpGet]
+        [HttpGet, Authorize]
+
         public async Task<ActionResult<IEnumerable<Detailorder>>> GetDetailOrder(Guid id)
         {
             if (db.Detailorders == null)
@@ -53,7 +53,8 @@ namespace backend.Controllers
                 data = _data
             }); ;
         }
-        [HttpPost("add")]
+        [HttpPost("add"), Authorize]
+
         public async Task<ActionResult> AddDetail([FromBody] Detailorder detail)
         {
 
@@ -75,7 +76,8 @@ namespace backend.Controllers
                 data = detail
             });
         }
-        [HttpPut("edit")]
+        [HttpPut("edit"), Authorize]
+
         public async Task<ActionResult> Edit([FromBody] Detailorder detail)
         {
             var _detail = await db.Detailorders.FindAsync(detail.Id);
@@ -95,7 +97,8 @@ namespace backend.Controllers
                 status = 200
             });
         }
-        [HttpDelete("delete")]
+        [HttpDelete("delete"), Authorize]
+
         public async Task<ActionResult> Delete([FromBody] Guid id)
         {
             if (db.Detailorders == null)
@@ -136,7 +139,8 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("getAllByOrder")]
+        [HttpGet("getAllByOrder"), Authorize]
+
         public async Task<ActionResult<IEnumerable<Detailorder>>> GetAllByOrder(Guid idOrder)
         {
             var _data = from dt in db.Detailorders

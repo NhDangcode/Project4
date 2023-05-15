@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Spinner, Progress } from "reactstrap";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { addProductToCartApi, cartActions } from "../../redux/slices/cartSlice";
+import { addProductToCartApi } from "../../redux/slices/cartSlice";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import ProductsList from "../components/UI/ProductsList";
@@ -12,7 +12,6 @@ import "../styles/product-details.css";
 import { toast } from "react-toastify";
 import { getDetailService } from "../../services/productService";
 const ProductDetails = () => {
-    const accessToken = JSON.parse(localStorage.getItem("token"));
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const dispatch = useDispatch();
     const [productDetail, setProductDetail] = useState({});

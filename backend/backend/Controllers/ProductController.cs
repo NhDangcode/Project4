@@ -1,4 +1,5 @@
 ﻿using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -48,7 +49,8 @@ namespace backend.Controllers
                 data = _data
             }); ;
         }
-        [HttpGet]
+        [HttpGet, Authorize]
+
         public async Task<ActionResult<IEnumerable<Product>>> GetProduct(Guid id)
         {
             if (db.Products == null)
@@ -77,7 +79,8 @@ namespace backend.Controllers
                 category
             });
         }
-        [HttpPost("add")]
+        [HttpPost("add"), Authorize]
+
         public async Task<ActionResult> AddProduct([FromBody] Product product)
         {
             await db.Products.AddAsync(product);
@@ -89,7 +92,8 @@ namespace backend.Controllers
                 data = product
             });
         }
-        [HttpPut("edit")]
+        [HttpPut("edit"), Authorize]
+
         public async Task<ActionResult> Edit([FromBody] Product product)
         {
             var _product = await db.Products.FindAsync(product.Id);
@@ -109,7 +113,8 @@ namespace backend.Controllers
                 status = 200
             });
         }
-        [HttpDelete("delete")]
+        [HttpDelete("delete"), Authorize]
+
         public async Task<ActionResult> Delete([FromBody] Guid id)
         {
             if (db.Products == null)

@@ -1,4 +1,5 @@
 ﻿using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,20 +27,6 @@ namespace backend.Controllers
                     status = 404
                 });
             }
-        //    public Guid Id { get; set; }
-
-        //public int? Status { get; set; }
-
-        //public decimal? Total { get; set; }
-
-        //public DateTime? CreateAt { get; set; }
-
-        //public Guid? IdUser { get; set; }
-
-        //public virtual ICollection<Detailorder> Detailorders { get; set; } = new List<Detailorder>();
-
-        //public virtual User? IdUserNavigation { get; set; }
-        //var _data = await db.Orders.ToListAsync();
         var _data = from order in db.Orders
                         join user in db.Users on order.IdUser equals user.Id
                         orderby order.CreateAt descending
@@ -59,7 +46,8 @@ namespace backend.Controllers
                 data = _data
             }); ;
         }
-        [HttpGet]
+        [HttpGet, Authorize]
+
         public async Task<ActionResult<IEnumerable<Order>>> GetOrder(Guid id)
         {
             if (db.Orders == null)
@@ -78,7 +66,8 @@ namespace backend.Controllers
                 data = _data
             }); ;
         }
-        [HttpPut("edit")]
+        [HttpPut("edit"), Authorize]
+
         public async Task<ActionResult> Edit([FromBody] Order order)
         {
             var _order = await db.Orders.FindAsync(order.Id);
@@ -98,7 +87,8 @@ namespace backend.Controllers
                 status = 200
             });
         }
-        [HttpPost("add")]
+        [HttpPost("add"), Authorize]
+
         public async Task<ActionResult> AddOrder([FromBody] Order order)
         {
             await db.Orders.AddAsync(order);
@@ -111,7 +101,8 @@ namespace backend.Controllers
                 data = _data
             });
         }
-        [HttpDelete("delete")]
+        [HttpDelete("delete"), Authorize]
+
         public async Task<ActionResult> Delete([FromBody] Guid id)
         {
             if (db.Orders == null)
@@ -152,7 +143,8 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("getOrderNotPay")]
+        [HttpGet("getOrderNotPay"), Authorize]
+
         public async Task<ActionResult<Order>> GetOrderNotPayment(Guid idUser)
         {
             var _data = await db.Orders.Where(x => x.IdUser == idUser).Where(x => x.Status == 0).FirstOrDefaultAsync();
@@ -171,10 +163,11 @@ namespace backend.Controllers
                 data = _data
             });
         }
-        [HttpGet("confirm")]
+        [HttpGet("confirm"), Authorize]
+
         public async Task<ActionResult> Confirm(Guid idUser, int status)
         {
-            var _order = await db.Orders.Where(x => x.IdUser == idUser).FirstOrDefaultAsync();
+            var _order = await db.Orders.Where(x => x.IdUser == idUser).Where(x => x.Status == 0).FirstOrDefaultAsync();
             decimal amount = 0;
             if (_order == null)
             {
@@ -195,7 +188,7 @@ namespace backend.Controllers
             _order.CreateAt = DateTime.Now;
             _order.Total = amount;
             _order.Status = status;
-            db.Entry(await db.Orders.FirstOrDefaultAsync(x => x.IdUser == idUser)).CurrentValues.SetValues(_order);
+            db.Entry(await db.Orders.FirstOrDefaultAsync(x => x.Id == _order.Id)).CurrentValues.SetValues(_order);
             await db.SaveChangesAsync();
             return Ok(new
             {
@@ -203,7 +196,8 @@ namespace backend.Controllers
                 status = 200
             });
         }
-        [HttpGet("getAllOrder")]
+        [HttpGet("getAllOrder"), Authorize]
+
         public async Task<ActionResult<IEnumerable<Order>>> GetAllOrderByIdUser(Guid idUser)
         {
             if (db.Users == null)
@@ -222,7 +216,8 @@ namespace backend.Controllers
                 data = _data
             }); ;
         }
-        [HttpGet("confirmOrder")]
+        [HttpGet("confirmOrder"), Authorize]
+
         public async Task<ActionResult> ConfirmOrder(Guid idOrder, int status)
         {
             var _order = await db.Orders.FindAsync(idOrder);
