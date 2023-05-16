@@ -21,7 +21,6 @@ export default function InputProduct() {
 
     const addUser = async (formData) => {
         const result = await dispatch(userSignupApi(formData));
-        console.log(result);
         if (result.payload.status === 200) {
             toast.success("Thêm tài khoản thành công!");
             navigate("/admin/users");

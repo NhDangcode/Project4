@@ -65,8 +65,8 @@ export const userSignupApi = createAsyncThunk(
 );
 export const editProfileApi = createAsyncThunk(
     "user/userEdit",
-    async (userEdit, token) => {
-        const response = await editProfileService(userEdit, token);
+    async (userEdit) => {
+        const response = await editProfileService( userEdit);
         localStorage.setItem("currentUser", JSON.stringify(response.data));
         return response;
     }

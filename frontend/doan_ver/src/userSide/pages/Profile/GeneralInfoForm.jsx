@@ -9,7 +9,6 @@ import icon from "../../../assets/images/user-icon.png";
 
 export const GeneralInfoForm = () => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
-    const token = JSON.parse(localStorage.getItem("token"));
     const imgReview = useRef(null);
     const [image, setImage] = useState();
     const navigate = useNavigate();
@@ -65,8 +64,9 @@ export const GeneralInfoForm = () => {
                 _image = values.pathImg;
             }
             let data = { ...values, pathImg: _image };
-            const respon = await dispatch(editProfileApi(data, token));
-            if (respon.payload.data.status == 200) {
+
+            const respon = await dispatch(editProfileApi(data));
+            if (respon.payload.data.status === 200) {
                 toast.success("Sửa thông tin thành công!");
                 navigate("/profile");
             } else {
@@ -75,10 +75,6 @@ export const GeneralInfoForm = () => {
         },
     });
     const { values, handleChange, handleSubmit } = formik;
-    const styleImgReview = {
-        display: values.pathImg ? "block" : "none",
-        width: "240px",
-    };
     return (
         <>
             <Col xs={12} xl={8}>

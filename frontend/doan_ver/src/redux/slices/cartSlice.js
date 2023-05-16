@@ -62,6 +62,7 @@ export const getAllCartItemApi = createAsyncThunk(
     "cart/getAllCart",
     async (accessToken) => {
         const respone = await getAllCartItemService(accessToken);
+        console.log(respone);
         if (respone.data === undefined) {
             return Promise.reject();
         }
@@ -81,13 +82,10 @@ export const addProductToCartApi = createAsyncThunk(
 export const deleteCartItemApi = createAsyncThunk(
     "cart/deleteProduct",
     async (dataCartDelete) => {
-        const responeDeleteProductToCart = await deleteCartItemService(
-            dataCartDelete
+        await deleteCartItemService(
+            dataCartDelete.id
         );
         const respone = await getAllCartItemService(dataCartDelete.accessToken);
-        if (respone.data === undefined) {
-            return Promise.reject();
-        }
         return respone.data;
     }
 );

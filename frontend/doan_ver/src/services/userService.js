@@ -1,7 +1,8 @@
 import requestApi from "../utils/requestApi";
 const token = JSON.parse(localStorage.getItem("token"));
 
-export const editProfileService = (userEdit, token) => {
+export const editProfileService = (userEdit) => {
+    console.log(userEdit, token);
     return requestApi({
         method: "put",
         url: `user/edit`,

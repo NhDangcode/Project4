@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { deleteUser } from "../../../services/userService";
 import { getAllUserService } from "../../../services/userService";
+
 export default function User() {
     const navigate = useNavigate();
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))?.data;
     const token = JSON.parse(localStorage.getItem("token"));
+
     const [users, setUsers] = useState([]);
     useEffect(() => {
         const fetchUser = async () => {
@@ -18,7 +20,7 @@ export default function User() {
             }
         };
         fetchUser();
-    }, [users]);
+    }, []);
     const onDelete = async (id) => {
         const result = await deleteUser(id);
         if (result.status === 200) {
@@ -43,6 +45,11 @@ export default function User() {
             title: "Địa chỉ",
             key: "address",
             dataIndex: "address",
+        },
+        {
+            title: "Vai trò",
+            key: "nameRole",
+            dataIndex: "nameRole",
         },
         {
             title: "Số điện thoại",

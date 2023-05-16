@@ -6,7 +6,7 @@ const headers = {
     }
 export const AddCategory = async (category, products) => {
     try {
-        const response = await axios.post('https://localhost:7210/api/category/add', JSON.stringify(category), {headers})
+        const response = await axios.post('https://localhost:7102/api/category/add', JSON.stringify(category), { headers });
         const result = response.data;
         console.log(result.message);
         if (result.status === 400) {
@@ -31,7 +31,7 @@ export const AddCategory = async (category, products) => {
 }
 export const AddProduct = async product => {
     try {
-        const response = await axios.post('https://localhost:7210/api/product/add', JSON.stringify(product), {headers});
+        const response = await axios.post('https://localhost:7102/api/product/add', JSON.stringify(product), {headers});
         const result = response.data;
         return {
             status: result.status
@@ -101,75 +101,3 @@ export const PostAllCategory = async () => {
         }
     }
 }
-// export default function CrawlData() {
-//     const [data, setData] = useState();
-    
-    
-    
-    
-//     useEffect(() => {
-//         postAllCategory();
-
-
-//         // for (var i = 0; i < slugs.length; i++) {
-//         //     const response = GetResponse1(slugs[i]);
-//         //     console.log(response);
-//         // }
-//         // slugs.map((slug) => (
-//         //     // const response = GetResponse1(slug);
-
-//         //     console.log(slug)
-//         //     // const [_category, products] = 
-//         //     // axios.request(config(`https://api-gateway.pharmacity.vn/api/category?slug=${url}`, 'get', null))
-//         //     //     .then((response) => {
-//         //     //         var result = response.data.data;
-//         //     //         const category =  result.category;
-//         //     //         const products =  result.products.edges;
-//         //     //         var _category = {
-//         //     //                 name: category.name,
-//         //     //                 slug: category.slug
-//         //     //             }
-//         //     //             return [_category, products];
-
-//         //     //             // axios.request(config('https://localhost:7210/api/category/add', 'post', _category))
-//         //     //             //     .then((response) => {
-//         //     //             //         var result = response.data;
-//         //     //             //         if (result.status === 200) {
-//         //     //             //             console.log("Add category success");
-//         //     //             //         } else {
-//         //     //             //             console.log("Add category error");
-//         //     //             //         }
-//         //     //             //     })
-//         //     //             //     .catch((error) => {
-//         //     //             //         console.log(error);
-//         //     //             //     });                    
-//         //     //     })
-//         //     //     .catch((error) => {
-//         //     //         console.log(error);
-//         //     //     });
-//         //     // console.log(_category, products);
-//         // ))
-//         // products.map((item) => {
-//         //                                 var _product = {
-//         //                                     name: item.node.name,
-//         //                                     detail: item.node.description,
-//         //                                     quantity: item.node.variants[0].quantityAvailable,
-//         //                                     price: item.node.variants[0].pricing.priceUndiscounted.gross.amount,
-//         //                                     type: item.node.variants[0].name,
-//         //                                     idCategory
-//         //                                 }
-//         //                                 axios.request(config('https://localhost:7210/api/product/add', 'post', _product))
-//         //                                     .then((response) => {
-//         //                                         var result = response.data;
-//         //                                         if (result.status === 200) {
-//         //                                             console.log("Add product success");
-//         //                                         } else {
-//         //                                             console.log("Add product error");
-//         //                                         }
-//         //                                     })
-//         //                             })
-//     }, [])
-//     return (
-//         <p>Hello</p>
-//     )
-// }

@@ -7,7 +7,7 @@ import CommonSection from "../components/UI/CommonSection";
 import { motion } from "framer-motion";
 import "../styles/cart.css";
 import { Link } from "react-router-dom";
-import { deleteCartItemApi } from "../../redux/slices/cartSlice";
+import { deleteCartItemApi, getAllCartItemApi } from "../../redux/slices/cartSlice";
 import { toast } from "react-toastify";
 import { VND } from "../../utils/convertVND";
 import { useNavigate } from "react-router-dom";
@@ -31,9 +31,12 @@ const Cart = () => {
         };
         const fetchRemoveProductFromCartApi = async () => {
             setLoadingDelete(true);
-            await dispatch(deleteCartItemApi(dataCartDelete));
-            setLoadingDelete(false);
-            toast.success("Xóa thành công!");
+            const result = await dispatch(deleteCartItemApi(dataCartDelete));
+            if (result.status === 200) {
+                toast.success("Xóa thành công!");
+                setLoadingDelete(false);
+                await dispatch(getAllCartItemApi(accessToken))
+            }
         };
 
         fetchRemoveProductFromCartApi();

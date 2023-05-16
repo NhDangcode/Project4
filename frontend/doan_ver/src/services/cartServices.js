@@ -95,16 +95,16 @@ export const getAllCartItemService = async (accessToken) => {
     }
 };
 //Xóa 1 detail order
-export const deleteCartItemService = async (accessToken, dataCartDelete) => {
+export const deleteCartItemService = async (id) => {
     try {
         const respone = await requestApi({
             method: "delete",
             url: `order/detail/delete`,
             headers: {
                 "Content-Type": "application/json",
-                Authorization: accessToken,
+                Authorization: token,
             },
-            data: JSON.stringify(dataCartDelete.id),
+            data: JSON.stringify(id),
         });
         return respone;
     } catch (error) {

@@ -17,8 +17,8 @@ export default function InputProduct() {
     };
 
     const addProduct = async (formData) => {
-        await toast.success("Thêm sản phẩm thành công!");
         await dispatch(addProductApi(formData, navigate));
+        await toast.success("Thêm sản phẩm thành công!");
     };
     return (
         <div className="container" style={{ padding: "0px 60px" }}>

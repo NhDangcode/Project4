@@ -4,7 +4,6 @@ import {
     changeStatusProductService,
     editProductService,
     getAllProductService,
-    deleteProduct,
 } from "../../services/productService";
 
 export const productSlice = createSlice({
@@ -31,7 +30,7 @@ export const addProductApi = (formData, navigate) => {
     return async (dispatch) => {
         try {
             const result = await addProductService(formData);
-
+            console.log(result);
             await dispatch(getAllProductsApi());
             navigate("/admin/products");
         } catch (error) {

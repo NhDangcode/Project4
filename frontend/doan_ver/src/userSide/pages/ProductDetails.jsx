@@ -7,12 +7,13 @@ import { addProductToCartApi } from "../../redux/slices/cartSlice";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import ProductsList from "../components/UI/ProductsList";
-
+import { getAllCartItemApi } from "../../redux/slices/cartSlice"
 import "../styles/product-details.css";
 import { toast } from "react-toastify";
 import { getDetailService } from "../../services/productService";
 const ProductDetails = () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const token = JSON.parse(localStorage.getItem("token"));
     const dispatch = useDispatch();
     const [productDetail, setProductDetail] = useState({});
     const [countAddCart, setCountAddCart] = useState(1);
@@ -58,6 +59,7 @@ const ProductDetails = () => {
         const fetchAddProductToCartApi = async () => {
             setLoadingCart(true);
             await dispatch(addProductToCartApi(dataCart));
+            await dispatch(getAllCartItemApi(token))
             setLoadingCart(false);
             toast.success(
                 `Thêm ${productDetail.name} vào giỏ hàng thành công!`

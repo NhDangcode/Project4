@@ -83,3 +83,13 @@ export const changeStatusOrderService = (idOrder) => {
         },
     });
 }
+
+export const getAllDoanhThu = () => {
+    return requestApi({
+        method: "get",
+        url: `thongke/doanhthu`,
+        headers: {
+            Authorization: token,
+        },
+    });
+};

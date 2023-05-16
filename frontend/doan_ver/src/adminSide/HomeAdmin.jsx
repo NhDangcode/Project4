@@ -18,6 +18,7 @@ import OrderDetail from "./pages/Order/OrderDetail";
 import InputCategory from "./pages/Category/InputCategory";
 import EditCategory from "./pages/Category/EditCategory";
 import InputUser from "./pages/User/InputUser";
+import Dashboard from "./pages/Home/Home";
 const HomeAdmin = () => {
     const mode = useSelector((state) => state.globalSlice.mode);
     const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -31,6 +32,7 @@ const HomeAdmin = () => {
                         element={<Navigate to="/admin/products" />}
                     />
                     <Route path="/admin/*" element={<Layout />}>
+
                         <Route path="users" element={<User />} />
                         <Route path="users/add" element={<InputUser />} />
                         <Route path="products" element={<Product />} />
@@ -39,6 +41,7 @@ const HomeAdmin = () => {
                             path="category/add"
                             element={<InputCategory />}
                         />
+                        <Route path="dashboard" element={<Dashboard />} />
                         <Route
                             path="category/edit/:idProduct"
                             element={<EditCategory />}
