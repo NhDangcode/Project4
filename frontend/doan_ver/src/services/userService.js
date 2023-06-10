@@ -37,7 +37,6 @@ export const getInforUserService = () => {
     });
 };
 export const getAllUserService = (token) => {
-    console.log(token);
     return requestApi({
         method: "get",
         url: `user/all`,
