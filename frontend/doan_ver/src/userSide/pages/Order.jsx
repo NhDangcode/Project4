@@ -1,11 +1,7 @@
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllOrderAnUserService } from "../../services/orderServices";
 import OrderCard from "../components/UI/OrderCard";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-
 const Order = () => {
     const navigate = useNavigate();
     const [order, setOrder] = useState([]);
