@@ -72,4 +72,16 @@ export const deleteUser = async (id) => {
         return error;
     }
 };
+export const changePasswordService = (data, tokenCurrent) => {
+    return requestApi({
+        method: "post",
+        url: "user/changepass",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: tokenCurrent,
+        },
+        data: JSON.stringify(data)
+    });
+};
+
 
