@@ -43,6 +43,7 @@ export const editProductApi = (formData, navigate) => {
     return async (dispatch) => {
         try {
             const result = await editProductService(formData);
+            console.log(result);
             dispatch(getAllProductsApi());
             navigate("/admin/products");
         } catch (error) {

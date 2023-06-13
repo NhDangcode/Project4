@@ -9,10 +9,7 @@ export default function FormProduct(props) {
     const navigate = useNavigate();
     const categories = useSelector((state) => state.category.categories);
     const user = JSON.parse(localStorage.getItem("currentUser"))?.data;
-
     const imgReview = useRef(null);
-    const [image, setImage] = useState();
-    const [type, setType] = useState();
     const handleUpImage = async (e) => {
         showImgProduct(e.target.files[0]);
         let imgArr = [];
@@ -68,6 +65,9 @@ export default function FormProduct(props) {
             submitForm(data);
         },
     });
+    const { values, errors, handleChange, handleSubmit } = formik;
+    const [type, setType] = useState(values.type);
+    const [image, setImage] = useState();
 
     const showImgProduct = (fileToLoad) => {
         let fileReader = new FileReader();
@@ -79,7 +79,6 @@ export default function FormProduct(props) {
         fileReader.readAsDataURL(fileToLoad);
     };
 
-    const { values, errors, handleChange, handleSubmit } = formik;
     const styleImgReview = {
         display: values.pathImg ? "block" : "none",
         width: "240px",
@@ -176,25 +175,27 @@ export default function FormProduct(props) {
                         placeholder="Chọn kiểu sản phẩm"
                         onChange={(value) => setType(value)}
                         filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            (option?.label ?? "")
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
                         }
-                        value={values.type}
+                        value={type}
                         options={[
                             {
-                                value: 'Hộp',
-                                label: 'Hộp',
+                                value: "Hộp",
+                                label: "Hộp",
                             },
                             {
-                                value: 'Chai',
-                                label: 'Chai',
+                                value: "Chai",
+                                label: "Chai",
                             },
                             {
-                                value: 'Miếng',
-                                label: 'Miếng',
+                                value: "Miếng",
+                                label: "Miếng",
                             },
                             {
-                                value: 'Tuýt',
-                                label: 'Tuýt',
+                                value: "Tuýt",
+                                label: "Tuýt",
                             },
                         ]}
                     />
