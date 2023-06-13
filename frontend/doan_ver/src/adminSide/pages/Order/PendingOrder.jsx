@@ -14,13 +14,13 @@ import { getAllProductsApi } from "../../../redux/slices/productSlice";
 export default function PendingOrder() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const token = JSON.parse(localStorage.getItem("token"));
     const { listOrder } = useSelector((state) => state.orderSlice);
     const listOrderPending = listOrder.filter((order) => {
         return order.status === 1;
     });
     const onDelete = async (id) => {
-        const result = await deleteOrder(id);
+        const result = await deleteOrder(id, token);
         if (result.status === 200) {
             toast.success("Xóa thành công!");
             await dispatch(getAllOrderApi());
@@ -55,9 +55,7 @@ export default function PendingOrder() {
             title: "Tổng tiền",
             dataIndex: "total",
             key: "total",
-            render: (value) => (
-                <>{VND.format(value)}</>
-            )
+            render: (value) => <>{VND.format(value)}</>,
         },
         {
             title: "Hành động",

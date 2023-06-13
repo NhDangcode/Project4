@@ -11,7 +11,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PostAllCategory } from "./crawl";
 const root = ReactDOM.createRoot(document.getElementById("root"));
-//PostAllCategory();
+// PostAllCategory();
 root.render(
     <React.StrictMode>
         <BrowserRouter>

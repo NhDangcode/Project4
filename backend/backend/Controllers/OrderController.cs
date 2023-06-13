@@ -125,7 +125,7 @@ namespace backend.Controllers
             try
             {
                 db.Orders.Remove(_order);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return Ok(new
                 {
                     message = "Xóa thành công!",

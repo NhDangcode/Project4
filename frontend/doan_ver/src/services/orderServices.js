@@ -32,7 +32,7 @@ export const getAllOrderAnUserService = async (id, tokenUser) => {
         return error;
     }
 };
-export const deleteOrder = async (id) => {
+export const deleteOrder = async (id, tokenCurrent) => {
     try {
         const respone = await requestApi({
             method: "delete",
@@ -40,7 +40,7 @@ export const deleteOrder = async (id) => {
             data: JSON.stringify(id),
             headers: {
                 "Content-Type": "application/json",
-                Authorization: token,
+                Authorization: tokenCurrent,
             },
         });
         return respone.data;

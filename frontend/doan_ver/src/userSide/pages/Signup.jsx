@@ -120,7 +120,7 @@ const Signup = () => {
                                 </FormGroup>
                                 <FormGroup className="form__group">
                                     <input
-                                        type="text"
+                                        type="password"
                                         id="password"
                                         placeholder="Nhập mật khẩu của bạn"
                                         value={formik.password}
@@ -135,7 +135,7 @@ const Signup = () => {
                                 </FormGroup>
                                 <FormGroup className="form__group">
                                     <input
-                                        type="text"
+                                        type="password"
                                         id="confirmedPassword"
                                         placeholder="Xác nhận mật khẩu của bạn"
                                         value={formik.values.confirmedPassword}
