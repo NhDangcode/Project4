@@ -43,10 +43,14 @@ const OrderCard = (props) => {
                                     {item.status === 1
                                         ? " Chưa thanh toán"
                                         : item.status === 2
-                                            ? " Đang chờ phê duyệt"
-                                            : item.status === 3 ? " Đã phê duyệt và chưa thanh toán"
-                                                : item.status === 4 ? " Đã phê duyệt và đã thanh toán"
-                                                    : " Khởi tạo"}
+                                        ? " Đang chờ phê duyệt"
+                                        : item.status === 3
+                                        ? " Đã phê duyệt và chưa thanh toán"
+                                        : item.status === 4
+                                        ? " Đã phê duyệt và đã thanh toán"
+                                        : item.status === 5
+                                        ? " Đã giao"
+                                        : " Khởi tạo"}
                                 </div>
                             </Col>
                             <Col md={3} className="drop__detail">

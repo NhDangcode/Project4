@@ -74,12 +74,12 @@ export const getAllOrderService = () => {
 };
 
 
-export const changeStatusOrderService = async (idOrder, status) => {
+export const changeStatusOrderService = async (idOrder, status, tokenCurrent) => {
     return requestApi({
         method: "get",
         url: `order/confirmOrder?idOrder=${idOrder}&status=${status}`,
         headers: {
-            Authorization: token,
+            Authorization: tokenCurrent,
         },
     });
 }

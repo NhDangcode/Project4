@@ -30,7 +30,7 @@ export default function PendingOrder() {
         }
     };
     const onEdit = async (id, status) => {
-        const result = await changeStatusOrderService(id, status === 1 ? 3 : 4);
+        const result = await changeStatusOrderService(id, status === 1 ? 3 : 4, token);
         console.log(result);
         if (result.data.status === 200) {
             toast.success("Phê duyệt thành công!");

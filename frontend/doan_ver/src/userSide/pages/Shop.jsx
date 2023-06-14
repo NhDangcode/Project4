@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { Col, Container, Row } from "reactstrap";
 import CommonSection from "../components/UI/CommonSection";
-import { Container, Row, Col } from "reactstrap";
 
 import Helmet from "../components/Helmet/Helmet";
 import ProductsList from "../components/UI/ProductsList";
 import "../styles/shop.css";
-import { useNavigate } from "react-router-dom";
 
 // import products from "../../assets/data/products";
-import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { UserContext } from "../contexts/UserContext";
 
 const filterProducts = (products, filterValue, sortValue, searchValue) => {
     const filterProductsSuccess =
@@ -33,19 +33,15 @@ const filterProducts = (products, filterValue, sortValue, searchValue) => {
               );
     return searchProducts;
 };
-
 const Shop = () => {
-    const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem("currentUser"))?.data;
-    if(user === undefined){
-        navigate("/login");
-    }
+    const { data } = useContext(UserContext);
     const products = useSelector((state) => state.product.products);
     const categories = useSelector((state) => state.category.categories);
     const [productsData, setProductsData] = useState([]);
     useEffect(() => {
         setProductsData(products);
     }, [products]);
+
     const [filterValue, setFilterValue] = useState("all");
     const [sortValue, setSortValue] = useState("all");
     const [searchValue, setSearchValue] = useState("");
@@ -88,7 +84,19 @@ const Shop = () => {
         setSortValue(sortValue);
         setProductsData(sortProducts);
     };
-
+    if (data.length > 0) {
+        var _data = [];
+        data.map((items) => {
+            const result = filterProducts(
+                products,
+                filterValue,
+                sortValue,
+                items
+            );
+            _data.push(...result);
+        });
+        console.log(_data);
+    }
     return (
         <Helmet title="Shop">
             <CommonSection title="Sản Phẩm" />

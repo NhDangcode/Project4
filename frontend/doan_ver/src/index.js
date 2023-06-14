@@ -10,10 +10,11 @@ import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PostAllCategory } from "./crawl";
+import UserContextProvider from "./userSide/contexts/UserContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 // PostAllCategory();
 root.render(
-    <React.StrictMode>
+    <UserContextProvider>
         <BrowserRouter>
             <ToastContainer
                 position="top-right"
@@ -26,5 +27,5 @@ root.render(
                 <App />
             </Provider>
         </BrowserRouter>
-    </React.StrictMode>
+    </UserContextProvider>
 );

@@ -66,23 +66,23 @@ export default function User() {
             },
         },
 
-        {
-            title: "Hành động",
-            key: "action",
-            render: (_, record) => (
-                <>
-                    <Button
-                        variant="contained"
-                        color="error"
-                        disabled={record.id === currentUser.id ? true : false}
-                        sx={{ marginLeft: "4px" }}
-                        onClick={() => onDelete(record.id)}
-                    >
-                        Xóa
-                    </Button>
-                </>
-            ),
-        },
+        // {
+        //     title: "Hành động",
+        //     key: "action",
+        //     render: (_, record) => (
+        //         <>
+        //             <Button
+        //                 variant="contained"
+        //                 color="error"
+        //                 disabled={record.id === currentUser.id ? true : false}
+        //                 sx={{ marginLeft: "4px" }}
+        //                 onClick={() => onDelete(record.id)}
+        //             >
+        //                 Xóa
+        //             </Button>
+        //         </>
+        //     ),
+        // },
     ];
     const rows = users.length > 0 ? users : [];
 

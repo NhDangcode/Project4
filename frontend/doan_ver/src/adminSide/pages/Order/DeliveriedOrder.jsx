@@ -12,11 +12,12 @@ export default function DeliveriedOrder() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { listOrder } = useSelector((state) => state.orderSlice);
+    const token = JSON.parse(localStorage.getItem('token'));
     const listOrderDeliveried = listOrder.filter((order) => {
         return order.status === 3 || order.status === 4 || order.status === 5;
     });
     const onEdit = async (id) => {
-        const result = await changeStatusOrderService(id, 5);
+        const result = await changeStatusOrderService(id, 5, token);
         if (result.data.status === 200) {
             toast.success("Phê duyệt thành công!");
             dispatch(getAllOrderApi());
