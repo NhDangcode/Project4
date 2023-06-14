@@ -3,11 +3,11 @@ import requestApi from "../utils/requestApi";
 const token = JSON.parse(localStorage.getItem("token"));
 const user = JSON.parse(localStorage.getItem("currentUser"))?.data;
 
-export const createOrderService = async () => {
+export const createOrderService = async (id, type) => {
     try {
         const respone = await requestApi({
             method: "get",
-            url: `order/confirm?idUser=${user.id}&status=1`,
+            url: `order/confirm?idUser=${user.id}&status=${id}&type=${type}`,
             headers: {
                 Authorization: token,
             },
@@ -74,10 +74,10 @@ export const getAllOrderService = () => {
 };
 
 
-export const changeStatusOrderService = async (idOrder) => {
+export const changeStatusOrderService = async (idOrder, status) => {
     return requestApi({
         method: "get",
-        url: `order/confirmOrder?idOrder=${idOrder}&status=2`,
+        url: `order/confirmOrder?idOrder=${idOrder}&status=${status}`,
         headers: {
             Authorization: token,
         },

@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { Table } from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import "./product.css";
 import Button from "@mui/material/Button";
+import { Table } from "antd";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { VND } from "../../../utils/convertVND";
 import { toast } from "react-toastify";
-import { deleteProduct } from "../../../services/productService";
 import { getAllProductsApi } from "../../../redux/slices/productSlice";
+import { deleteProduct } from "../../../services/productService";
+import { VND } from "../../../utils/convertVND";
+import "./product.css";
 export default function Product() {
     const navigate = useNavigate();
     const dispatch = useDispatch();

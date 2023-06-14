@@ -31,16 +31,3 @@ export const getAllOrderApi = () => {
         }
     };
 };
-
-
-export const changeStatusOrderApi = (idOrder) => {
-    return async (dispatch) => {
-        try {
-            const result = await changeStatusOrderService(idOrder);
-            console.log(result.data);
-            dispatch(getAllOrderApi());
-        } catch (error) {
-            console.log(error);
-        }
-    };
-};

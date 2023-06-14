@@ -17,7 +17,7 @@ export default function PendingOrder() {
     const token = JSON.parse(localStorage.getItem("token"));
     const { listOrder } = useSelector((state) => state.orderSlice);
     const listOrderPending = listOrder.filter((order) => {
-        return order.status === 1;
+        return order.status === 2 || order.status === 1;
     });
     const onDelete = async (id) => {
         const result = await deleteOrder(id, token);
@@ -29,12 +29,13 @@ export default function PendingOrder() {
             toast.error("Xóa thất bại!");
         }
     };
-    const onEdit = async (id) => {
-        const result = await changeStatusOrderService(id);
+    const onEdit = async (id, status) => {
+        const result = await changeStatusOrderService(id, status === 1 ? 3 : 4);
+        console.log(result);
         if (result.data.status === 200) {
             toast.success("Phê duyệt thành công!");
-            await dispatch(getAllOrderApi());
-            await dispatch(getAllProductsApi());
+            dispatch(getAllOrderApi());
+            dispatch(getAllProductsApi());
             navigate("/admin/orders/pending");
         } else {
             toast.error("Phê duyệt thất bại!");
@@ -58,6 +59,16 @@ export default function PendingOrder() {
             render: (value) => <>{VND.format(value)}</>,
         },
         {
+            title: "Trạng thái",
+            key: "status",
+            dataIndex: "status",
+            render: (value) => {
+                return (
+                    <>{value === 1 ? "Chưa thanh toán" : "Đã thanh toán"}</>
+                )
+            }
+        },
+        {
             title: "Hành động",
             key: "action",
             render: (_, record) => (
@@ -66,7 +77,7 @@ export default function PendingOrder() {
                         variant="contained"
                         color="success"
                         sx={{ marginLeft: "4px" }}
-                        onClick={() => onEdit(record.id)}
+                        onClick={() => onEdit(record.id, record.status)}
                     >
                         Phê duyệt
                     </Button>
