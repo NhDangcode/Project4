@@ -48,13 +48,13 @@ export const deleteOrder = async (id, tokenCurrent) => {
         return error;
     }
 };
-export const getDetailsOrderService = async (dataOrderDetail) => {
+export const getDetailsOrderService = async (dataOrderDetail, tokenCurrent) => {
     try {
         const respone = await requestApi({
             method: "get",
             url: `order/detail/getAllByOrder?idOrder=${dataOrderDetail}`,
             headers: {
-                Authorization: token,
+                Authorization: tokenCurrent,
             },
         });
         return respone.data;

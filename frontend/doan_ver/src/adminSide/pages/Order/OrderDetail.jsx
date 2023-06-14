@@ -9,10 +9,10 @@ export default function OrderDetail() {
     const [orderArray, setOrderArray] = useState([]);
     const { state } = useLocation();
     const order = state;
-
+    const token = JSON.parse(localStorage.getItem("token"));
     useEffect(() => {
         const fetchGetAllOrderAnUserApi = async () => {
-            const respone = await getDetailsOrderService(state.id);
+            const respone = await getDetailsOrderService(state.id, token);
             setOrderArray(respone.data);
         };
         fetchGetAllOrderAnUserApi();

@@ -9,10 +9,11 @@ import { VND } from "../../../utils/convertVND";
 export const OrderDetail = () => {
     const { id } = useParams();
     const [cartItems, setCartItems] = useState([]);
+    const token = JSON.parse(localStorage.getItem("token"));
 
     useEffect(() => {
         const fetchGetDetailOrderApi = async () => {
-            const respone = await getDetailsOrderService(id);
+            const respone = await getDetailsOrderService(id, token);
             console.log(respone.data);
             setCartItems(respone.data);
         };

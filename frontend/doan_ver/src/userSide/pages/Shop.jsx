@@ -84,19 +84,23 @@ const Shop = () => {
         setSortValue(sortValue);
         setProductsData(sortProducts);
     };
-    if (data.length > 0) {
-        var _data = [];
-        data.map((items) => {
-            const result = filterProducts(
-                products,
-                filterValue,
-                sortValue,
-                items
-            );
-            _data.push(...result);
-        });
-        console.log(_data);
-    }
+    useEffect(() => {
+        if (data.length > 0) {
+            const _data = data.map((items) => {
+                const result = filterProducts(
+                    products,
+                    filterValue,
+                    sortValue,
+                    items
+                );
+                return result;
+            });
+            const _result = [].concat(_data[0], _data[1], _data[2]);
+            if (_result !== undefined) {
+                setProductsData(_result);
+            }
+        }
+    }, [data]);
     return (
         <Helmet title="Shop">
             <CommonSection title="Sản Phẩm" />

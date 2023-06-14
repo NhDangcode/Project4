@@ -18,16 +18,13 @@ export const getDetailService = async (id) => {
         const respone = await requestApi({
             method: "get",
             url: `product?id=${id}`,
-            headers: {
-                Authorization: token,
-            },
         });
         return respone.data;
     } catch (error) {
         return error;
     }
 };
-export const deleteProduct = async (id) => {
+export const deleteProduct = async (id, tokenCurrent) => {
     try {
         const respone = await requestApi({
             method: "delete",
@@ -35,7 +32,7 @@ export const deleteProduct = async (id) => {
             data: JSON.stringify(id),
             headers: {
                 "Content-Type": "application/json",
-                Authorization: token,
+                Authorization: tokenCurrent,
             }
         });
         return respone.data;

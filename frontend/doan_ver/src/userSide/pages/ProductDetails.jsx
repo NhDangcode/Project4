@@ -7,7 +7,7 @@ import { addProductToCartApi } from "../../redux/slices/cartSlice";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import ProductsList from "../components/UI/ProductsList";
-import { getAllCartItemApi } from "../../redux/slices/cartSlice"
+import { getAllCartItemApi } from "../../redux/slices/cartSlice";
 import "../styles/product-details.css";
 import { toast } from "react-toastify";
 import { getDetailService } from "../../services/productService";
@@ -31,12 +31,12 @@ const ProductDetails = () => {
                 image: responeProduct.data?.pathImg,
                 price: responeProduct.data?.price,
                 description: responeProduct.data?.detail,
-                category: responeProduct.category.name,
+                category: responeProduct.category?.name,
                 type: responeProduct.data?.type,
                 quantity: responeProduct.data?.quantity,
-                idCategory: responeProduct.category.id,
+                idCategory: responeProduct.category?.id,
             };
-            await setProductDetail(productDetail);
+            setProductDetail(productDetail);
             setLoading(false);
         };
         fetchDetailProductApi();
@@ -53,19 +53,19 @@ const ProductDetails = () => {
             price: productDetail.price,
         };
         const dataCart = {
-            productDetail,
+            accessToken: token,
             data,
         };
         const fetchAddProductToCartApi = async () => {
             setLoadingCart(true);
-            await dispatch(addProductToCartApi(dataCart));
-            await dispatch(getAllCartItemApi(token))
+            dispatch(addProductToCartApi(dataCart));
+            dispatch(getAllCartItemApi(token));
             setLoadingCart(false);
             toast.success(
                 `Thêm ${productDetail.name} vào giỏ hàng thành công!`
             );
         };
-        if (currentUser.data !== null) {
+        if (currentUser?.data !== undefined) {
             fetchAddProductToCartApi();
         } else {
             toast.error("Bạn cần đăng nhập để thêm vào giỏ hàng!");

@@ -8,15 +8,15 @@ export const addProductToCartService = async (dataCart) => {
     let data = dataCart.data;
     let idOrder = "";
     try {
-        const respon = await getOrderNotPayment(token);
+        const respon = await getOrderNotPayment(dataCart.accessToken);
         if (respon.status === 400) {
-            const _respon = await createNewOrrder(token);
+            const _respon = await createNewOrrder(dataCart.accessToken);
             idOrder = _respon.data.id;
         } else {
             idOrder = respon.data.id;
         }
         data = { ...data, idOrder };
-        const respon_1 = await createNewDetailOrrder(token, data);
+        const respon_1 = await createNewDetailOrrder(dataCart.accessToken, data);
         return {
             result: respon_1,
             idOrder

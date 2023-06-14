@@ -4,7 +4,7 @@ export const UserContext = createContext();
 const UserContextProvider = (props) => {
     const [data, setData] = useState([]);
     const onSetData = (array) => {
-        setData(...array);
+        setData(array);
     };
     return (
         <UserContext.Provider value={{ data, onSetData }}>

@@ -11,10 +11,11 @@ import "./product.css";
 export default function Product() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const token = JSON.parse(localStorage.getItem('token'));
     const listProduct = useSelector((state) => state.product.products);
     const onDelete = async (id) => {
-        const result = await deleteProduct(id);
+        const result = await deleteProduct(id, token);
+        console.log(result);
         if (result.status === 200) {
             toast.success("Xóa thành công!");
             await dispatch(getAllProductsApi());
@@ -36,7 +37,7 @@ export default function Product() {
             title: "Tên sản phẩm",
             dataIndex: "name",
             key: "name",
-            width: 200
+            width: 200,
         },
         {
             title: "Giá sản phẩm",

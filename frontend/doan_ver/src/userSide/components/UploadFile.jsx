@@ -29,6 +29,7 @@ const UploadFile = ({ open, onSetOpen }) => {
             data.push(items[1]);
         });
         onSetData(data);
+        onSetOpen();
         navigate("/shop");
     };
     return (
@@ -41,14 +42,18 @@ const UploadFile = ({ open, onSetOpen }) => {
             >
                 <Form layout="vertical">
                     <Row className="input" gutter={16}>
-                        <Col span={24}>
-                            <Form.Item label="File">
-                                <Upload {...props}>
-                                    <Button icon={<UploadOutlined />}>
-                                        Click to upload file excel
-                                    </Button>
-                                </Upload>
-                            </Form.Item>
+                        <Col
+                            span={24}
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Upload {...props}>
+                                <Button icon={<UploadOutlined />}>
+                                    Click to upload file excel
+                                </Button>
+                            </Upload>
                         </Col>
                     </Row>
                 </Form>
