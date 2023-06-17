@@ -11,6 +11,7 @@ import { getAllCartItemApi } from "../../redux/slices/cartSlice";
 import "../styles/product-details.css";
 import { toast } from "react-toastify";
 import { getDetailService } from "../../services/productService";
+import { VND } from "../../utils/convertVND";
 const ProductDetails = () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const token = JSON.parse(localStorage.getItem("token"));
@@ -99,20 +100,33 @@ const ProductDetails = () => {
                                 <Col>
                                     <div className="product__details">
                                         <h2>{productDetail.name}</h2>
-                                        <div className="d-flex align-items-center gap-5">
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                            }}
+                                        >
                                             <span className="product__price">
-                                                {productDetail.price} VND
+                                                Giá :{" "}
+                                                {VND.format(
+                                                    productDetail.price
+                                                )}
                                             </span>
-                                            <span>
+
+                                            <span className="product__price">
                                                 Loại sản phẩm :{" "}
                                                 {productDetail.category
                                                     ? productDetail.category.toUpperCase()
                                                     : ""}
                                             </span>
+                                            <span className="product__price">
+                                                Số lượng còn lại:{" "}
+                                                {productDetail.quantity}
+                                            </span>
+                                            <p className="mt-3">
+                                                {productDetail.description}
+                                            </p>
                                         </div>
-                                        <p className="mt-3">
-                                            {productDetail.description}
-                                        </p>
                                         <div className="btn--group__addCart">
                                             <button
                                                 className="btn--sub__addCart"
