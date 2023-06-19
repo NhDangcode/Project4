@@ -111,3 +111,38 @@ export const deleteCartItemService = async (id) => {
         return error
     }
 };
+
+// Tăng lên 1 đơn vị
+export const increaseItemService = async (id) =>{
+    try {
+        const respone = await requestApi({
+            method: "put",
+            url: `order/detail/increase`,
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+            },
+            data: JSON.stringify(id),
+        });
+        return respone;
+    } catch (error) {
+        return error
+    }
+}
+// Giảm xuống 1 đơn vị
+export const decreaseItemService = async (id) =>{
+    try {
+        const respone = await requestApi({
+            method: "put",
+            url: `order/detail/decrease`,
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+            },
+            data: JSON.stringify(id),
+        });
+        return respone;
+    } catch (error) {
+        return error
+    }
+}

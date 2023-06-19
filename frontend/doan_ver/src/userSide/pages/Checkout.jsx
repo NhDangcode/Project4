@@ -7,17 +7,18 @@ import CommonSection from "../components/UI/CommonSection";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { } from "../../redux/slices/cartSlice";
+import {} from "../../redux/slices/cartSlice";
 import { VND } from "../../utils/convertVND";
 import "../styles/checkout.css";
 import Payment from "./Payment";
+import { FormLabel } from "@themesberg/react-bootstrap";
 const Checkout = () => {
     const totalAmount = useSelector((state) => state.cart.total);
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))?.data;
     const [open, setOpen] = useState(false);
     const onSetOpen = () => {
         setOpen(!open);
-    }
+    };
     const formik = useFormik({
         initialValues: {
             name: currentUser?.name,
@@ -50,6 +51,7 @@ const Checkout = () => {
                                     Thông tin cá nhân
                                 </h2>
                                 <Form className="billing__form">
+                                    <FormLabel>Họ và tên</FormLabel>
                                     <FormGroup className="form__group">
                                         <input
                                             type="text"
@@ -59,6 +61,7 @@ const Checkout = () => {
                                             defaultValue={formik.values.name}
                                         />
                                     </FormGroup>
+                                    <FormLabel>Email</FormLabel>
                                     <FormGroup className="form__group">
                                         <input
                                             type="eamil"
@@ -68,6 +71,7 @@ const Checkout = () => {
                                             defaultValue={formik.values.email}
                                         />
                                     </FormGroup>
+                                    <FormLabel>Số điện thoại</FormLabel>
                                     <FormGroup className="form__group">
                                         <input
                                             type="number"
@@ -77,6 +81,7 @@ const Checkout = () => {
                                             onChange={formik.handleChange}
                                         />
                                     </FormGroup>
+                                    <FormLabel>Địa chỉ</FormLabel>
                                     <FormGroup className="form__group">
                                         <input
                                             type="text"
@@ -107,9 +112,7 @@ const Checkout = () => {
                     </Container>
                 </section>
             </Helmet>
-            {
-                open ? <Payment open={open} onSetOpen={onSetOpen} /> : <></>
-            }
+            {open ? <Payment open={open} onSetOpen={onSetOpen} /> : <></>}
         </>
     );
 };

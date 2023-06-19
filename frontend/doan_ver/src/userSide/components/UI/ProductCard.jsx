@@ -4,11 +4,42 @@ import { Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import "../../styles/product-card.css";
 import { VND } from "../../../utils/convertVND";
+import { Button } from "antd";
+import { useDispatch } from "react-redux";
+import {
+    addProductToCartApi,
+    getAllCartItemApi,
+} from "../../../redux/slices/cartSlice";
+import { toast } from "react-toastify";
 const ProductCard = (props) => {
     const { item } = props;
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const token = JSON.parse(localStorage.getItem("token"));
+    const dispatch = useDispatch();
+    const addToCart = () => {
+        const data = {
+            idProduct: item.id,
+            quantity: 1,
+            price: item.price,
+        };
+        const dataCart = {
+            accessToken: token,
+            data,
+        };
+        const fetchAddProductToCartApi = async () => {
+            dispatch(addProductToCartApi(dataCart));
+            dispatch(getAllCartItemApi(token));
+            toast.success(`Thêm ${item.name} vào giỏ hàng thành công!`);
+        };
+        if (currentUser?.data !== undefined) {
+            fetchAddProductToCartApi();
+        } else {
+            toast.error("Bạn cần đăng nhập để thêm vào giỏ hàng!");
+        }
+    };
     return (
         <Col lg="3" md="4" className="mb-2">
-            <div className="product__item">
+            <div className="product__item" style={{ minHeight: "450px" }}>
                 <div className="product__img">
                     <motion.img
                         whileHover={{ scale: 0.9 }}
@@ -32,6 +63,9 @@ const ProductCard = (props) => {
                     </div>
                 </div>
             </div>
+            <Button type="primary" block onClick={addToCart}>
+                Thêm vào giỏ hàng
+            </Button>
         </Col>
     );
 };

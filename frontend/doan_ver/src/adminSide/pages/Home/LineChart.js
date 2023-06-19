@@ -19,9 +19,8 @@ const LineChart = () => {
                     setData(respone.data.data);
                 }
             }).catch(err => console.log(err))
-    },[])
+    }, [])
     const result = lineChart(data);
-    console.log(result);
     return (
         <>
             <div className="linechart">

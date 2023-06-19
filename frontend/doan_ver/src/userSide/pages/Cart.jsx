@@ -7,12 +7,90 @@ import CommonSection from "../components/UI/CommonSection";
 import { motion } from "framer-motion";
 import "../styles/cart.css";
 import { Link } from "react-router-dom";
-import { deleteCartItemApi, getAllCartItemApi } from "../../redux/slices/cartSlice";
+import {
+    deleteCartItemApi,
+    getAllCartItemApi,
+} from "../../redux/slices/cartSlice";
 import { toast } from "react-toastify";
 import { VND } from "../../utils/convertVND";
 import { useNavigate } from "react-router-dom";
+import { Button, Table } from "antd";
+import {
+    decreaseItemService,
+    increaseItemService,
+} from "../../services/cartServices";
 
 const Cart = () => {
+    const columns = [
+        {
+            title: "Hình ảnh",
+            dataIndex: "pathImg",
+            key: "pathImg",
+            render: (value) => {
+                return (
+                    <img width={"100px"} height={"100px"} src={value} alt="1" />
+                );
+            },
+        },
+        {
+            title: "Tên sản phẩm",
+            dataIndex: "name",
+            key: "name",
+        },
+        {
+            title: "Giá",
+            dataIndex: "price",
+            key: "price",
+            render: (value) => {
+                return <>{VND.format(value)}</>;
+            },
+        },
+        {
+            title: "Số lượng",
+            key: "quantity",
+            render: (render) => {
+                return (
+                    <div style={{ display: "flex" }}>
+                        <button
+                            className="btn--sub__addCart"
+                            onClick={() => {
+                                handleDecrease(render.id);
+                            }}
+                        >
+                            <i className="ri-subtract-fill"></i>
+                        </button>
+
+                        <div className="btn--sub__count">
+                            <p>{render.quantity}</p>
+                        </div>
+                        <button
+                            className="btn--sub__addCart"
+                            onClick={() => {
+                                handleIncrease(render.id);
+                            }}
+                        >
+                            <i className="ri-add-fill"></i>
+                        </button>
+                    </div>
+                );
+            },
+        },
+        {
+            title: "Hành động",
+            key: "action",
+            render: (render) => {
+                return (
+                    <Button
+                        ghost
+                        danger
+                        onClick={() => removeProductFromCart(render.id)}
+                    >
+                        Xóa
+                    </Button>
+                );
+            },
+        },
+    ];
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("currentUser"))?.data;
     if (user === undefined) {
@@ -35,13 +113,24 @@ const Cart = () => {
             if (result.status === 200) {
                 toast.success("Xóa thành công!");
                 setLoadingDelete(false);
-                await dispatch(getAllCartItemApi(accessToken))
+                dispatch(getAllCartItemApi(accessToken));
             }
         };
 
         fetchRemoveProductFromCartApi();
     };
-
+    const handleIncrease = async (id) => {
+        const result = await increaseItemService(id);
+        if (result.status === 200) {
+            dispatch(getAllCartItemApi(accessToken));
+        }
+    };
+    const handleDecrease = async (id) => {
+        const result = await decreaseItemService(id);
+        if (result.status === 200) {
+            dispatch(getAllCartItemApi(accessToken));
+        }
+    };
     return (
         <Helmet title="Cart">
             {loadingDelete ? (
@@ -59,28 +148,32 @@ const Cart = () => {
                                     Không có mặt hàng nào được thêm vào giỏ hàng
                                 </h2>
                             ) : (
-                                <table className="table bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Hình ảnh</th>
-                                            <th>Tên sản phẩm</th>
-                                            <th>Giá</th>
-                                            <th>Số lượng</th>
-                                            <th>Xóa</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {cartItems.map((item, index) => (
-                                            <Tr
-                                                item={item}
-                                                key={index}
-                                                onRemoveProductFromCart={
-                                                    removeProductFromCart
-                                                }
-                                            />
-                                        ))}
-                                    </tbody>
-                                </table>
+                                // <table className="table bordered">
+                                //     <thead>
+                                //         <tr>
+                                //             <th>Hình ảnh</th>
+                                //             <th>Tên sản phẩm</th>
+                                //             <th>Giá</th>
+                                //             <th>Số lượng</th>
+                                //             <th>Xóa</th>
+                                //         </tr>
+                                //     </thead>
+                                //     <tbody>
+                                //         {cartItems.map((item, index) => (
+                                //             <Tr
+                                //                 item={item}
+                                //                 key={index}
+                                //                 onRemoveProductFromCart={
+                                //                     removeProductFromCart
+                                //                 }
+                                //             />
+                                //         ))}
+                                //     </tbody>
+                                // </table>
+                                <Table
+                                    dataSource={cartItems}
+                                    columns={columns}
+                                />
                             )}
                         </Col>
                         <Col lg="3">

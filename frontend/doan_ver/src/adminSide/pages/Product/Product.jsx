@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
-import { Table } from "antd";
-import React from "react";
+import { Table, Input, Row, Col } from "antd";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,17 +8,19 @@ import { getAllProductsApi } from "../../../redux/slices/productSlice";
 import { deleteProduct } from "../../../services/productService";
 import { VND } from "../../../utils/convertVND";
 import "./product.css";
+const { Search } = Input;
 export default function Product() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const token = JSON.parse(localStorage.getItem('token'));
+    const token = JSON.parse(localStorage.getItem("token"));
     const listProduct = useSelector((state) => state.product.products);
+    const [data, setData] = useState(listProduct.length > 0 ? listProduct : []);
     const onDelete = async (id) => {
         const result = await deleteProduct(id, token);
         console.log(result);
         if (result.status === 200) {
             toast.success("Xóa thành công!");
-            await dispatch(getAllProductsApi());
+            dispatch(getAllProductsApi());
             navigate("/admin/products");
         } else {
             toast.error("Xóa thất bại!");
@@ -86,33 +88,39 @@ export default function Product() {
             ),
         },
     ];
-    const rows = listProduct.length > 0 ? listProduct : [];
+    const onFilter = (value) => {
+        setData(listProduct.filter((x) => x.name.includes(value)));
+    };
     return (
         <>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    margin: "50px",
-                }}
-            >
-                <h2>Danh sách sản phẩm</h2>
-                <Button
-                    style={{
-                        marginRight: "100px",
-                        padding: "10px",
-                    }}
-                    color="success"
-                    variant="contained"
-                    onClick={() => {
-                        navigate("/admin/product/add");
-                    }}
-                >
-                    Thêm sản phẩm
-                </Button>
-            </div>
+            <Row gutter={24} style={{ margin: "20px" }}>
+                <Col span={8}>
+                    <h2>Danh sách sản phẩm</h2>
+                </Col>
+                <Col span={8}>
+                    <Search
+                        placeholder="Nhập sản phẩm bạn muốn tìm..."
+                        loading
+                        enterButton
+                        onChange={(e) => onFilter(e.target.value)}
+                        width={"100px"}
+                    />
+                </Col>
+                <Col span={4} offset={4}>
+                    <Button
+                        color="success"
+                        variant="contained"
+                        onClick={() => {
+                            navigate("/admin/product/add");
+                        }}
+                    >
+                        Thêm sản phẩm
+                    </Button>
+                </Col>
+            </Row>
+
             <div style={{ height: "78vh", width: "100%", padding: "0px 20px" }}>
-                <Table columns={columns} dataSource={rows} />
+                <Table columns={columns} dataSource={data} />
             </div>
         </>
     );

@@ -22,15 +22,15 @@ const filterProducts = (products, filterValue, sortValue, searchValue) => {
         sortValue === "all"
             ? filterProductsSuccessClone
             : sortValue === "ascending"
-                ? filterProductsSuccessClone.sort((a, b) => a.price - b.price)
-                : filterProductsSuccessClone.sort((a, b) => b.price - a.price);
+            ? filterProductsSuccessClone.sort((a, b) => a.price - b.price)
+            : filterProductsSuccessClone.sort((a, b) => b.price - a.price);
 
     const searchProducts =
         searchValue === ""
             ? sortProductSuccess
             : sortProductSuccess.filter((item) =>
-                item.name.toLowerCase().includes(searchValue.toLowerCase())
-            );
+                  item.name.toLowerCase().includes(searchValue.toLowerCase())
+              );
     return searchProducts;
 };
 const Shop = () => {
@@ -101,7 +101,6 @@ const Shop = () => {
             }
         }
     }, [data]);
-    console.log(productsData);
     return (
         <Helmet title="Shop">
             <CommonSection title="Sản Phẩm" />
