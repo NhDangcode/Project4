@@ -45,8 +45,9 @@ const Login = () => {
                     "Đăng nhập thất bại! Vui lòng kiểm tra email hoặc mật khẩu."
                 );
             } else {
-                await navigate("/home");
+                navigate("/home");
                 toast.success("Đăng nhập thành công!");
+                window.location.reload(true);
             }
         };
 

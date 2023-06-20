@@ -113,7 +113,7 @@ export const deleteCartItemService = async (id) => {
 };
 
 // Tăng lên 1 đơn vị
-export const increaseItemService = async (id) =>{
+export const increaseItemService = async (id) => {
     try {
         const respone = await requestApi({
             method: "put",
@@ -130,7 +130,7 @@ export const increaseItemService = async (id) =>{
     }
 }
 // Giảm xuống 1 đơn vị
-export const decreaseItemService = async (id) =>{
+export const decreaseItemService = async (id) => {
     try {
         const respone = await requestApi({
             method: "put",

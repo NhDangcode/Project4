@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import { Table, Input, Row, Col } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -26,6 +26,9 @@ export default function Product() {
             toast.error("Xóa thất bại!");
         }
     };
+    useEffect(() => {
+        setData(listProduct);
+    }, [listProduct]);
     const columns = [
         {
             title: "Hình ảnh",

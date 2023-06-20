@@ -30,7 +30,7 @@ const cartSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAllCartItemApi.fulfilled, (state, action) => {
-                
+
                 state.cartItems = action.payload;
                 state.total = sumArray(state.cartItems);
             })
@@ -72,9 +72,12 @@ export const getAllCartItemApi = createAsyncThunk(
 export const addProductToCartApi = createAsyncThunk(
     "cart/addProduct",
     async (dataCart) => {
-        await addProductToCartService(dataCart);
-        const respone = await getAllCartItemService(dataCart.accessToken);
-        return respone.data;
+        const result = await addProductToCartService(dataCart);
+        console.log(result);
+        if (result.result.status === 200) {
+            const respone = await getAllCartItemService(dataCart.accessToken);
+            return respone.data;
+        }
     }
 );
 

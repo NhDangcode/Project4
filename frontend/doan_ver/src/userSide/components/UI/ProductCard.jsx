@@ -1,16 +1,15 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Col } from "reactstrap";
-import { Link } from "react-router-dom";
-import "../../styles/product-card.css";
-import { VND } from "../../../utils/convertVND";
 import { Button } from "antd";
+import { motion } from "framer-motion";
+import React from "react";
 import { useDispatch } from "react-redux";
-import {
-    addProductToCartApi,
-    getAllCartItemApi,
-} from "../../../redux/slices/cartSlice";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Col } from "reactstrap";
+import {
+    addProductToCartApi
+} from "../../../redux/slices/cartSlice";
+import { VND } from "../../../utils/convertVND";
+import "../../styles/product-card.css";
 const ProductCard = (props) => {
     const { item } = props;
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -28,7 +27,6 @@ const ProductCard = (props) => {
         };
         const fetchAddProductToCartApi = async () => {
             dispatch(addProductToCartApi(dataCart));
-            dispatch(getAllCartItemApi(token));
             toast.success(`Thêm ${item.name} vào giỏ hàng thành công!`);
         };
         if (currentUser?.data !== undefined) {
